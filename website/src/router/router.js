@@ -11,6 +11,16 @@ import { createRouter, createWebHistory } from 'vue-router'
 //   }
 // })
 
+const JudgeAuthor = (to) =>{
+    const user = sessionStorage.getItem('username')
+    if(user=='owner'){
+        return '/project'
+    }
+    else{
+        return '/record'
+    }
+}
+
 
 const routes = [
     {
@@ -24,7 +34,7 @@ const routes = [
     {
         path:"/homepage",
         component: () => import("../views/HomePage.vue"),
-        redirect:'/project',
+        redirect: JudgeAuthor,
         children:[
             {
                 path: "/project",
@@ -32,12 +42,17 @@ const routes = [
             },
             {
                 name:'projectinfo',
-                path: '/projectInfo/:id',
+                path: '/projectInfo/:id/:index',
                 component: () => import("../views/projectInfo.vue")
             },
             {
-                path: "/check",
-                component: () => import("../views/Check.vue")
+                path: "/record",
+                component: () => import("../views/Record.vue")
+            },
+            {
+                name:'recordinfo',
+                path: '/recordInfo/:id/:index',
+                component: () => import("../views/recordInfo.vue")
             },
             {
                 path: "/upload",
@@ -50,7 +65,6 @@ const routes = [
         ]
     }
 ]
-
 
 const router = createRouter({
     history: createWebHistory(),

@@ -36,17 +36,17 @@ const outLogin = () =>{
         text-color="#fff"
         :router="true"
        >
-       <el-menu-item index="/project">
+        <el-menu-item v-if="type=='owner'" index="/project">
           <el-icon><Tickets /></el-icon>
           <span>项目</span>
+        </el-menu-item>
+        <el-menu-item index="/record">
+          <el-icon><Tickets /></el-icon>
+          <span>子项目</span>
         </el-menu-item>
         <el-menu-item v-if="type=='owner'" index="/upload">
           <el-icon><Upload /></el-icon>
           <span>发布</span>
-        </el-menu-item>
-        <el-menu-item index="/check">
-          <el-icon><CircleCheck /></el-icon>
-          <span>审批</span>
         </el-menu-item>
         <el-menu-item index="/setting">
           <el-icon><Setting /></el-icon>
