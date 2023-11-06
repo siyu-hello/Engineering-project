@@ -4,11 +4,13 @@ import axios from 'axios'
 import { useRoute } from 'vue-router'
 import userecordInfo from '../pinia/record'
 import { ElMessage } from 'element-plus'
+import { Timer } from '@element-plus/icons-vue'
 
 
 const route = useRoute()
 const recordInfo = userecordInfo()
 const infoForm = reactive({ data: {} })
+
 
 const FormVisible1 = ref(false)
 const FormVisible2 = ref(false)
@@ -161,7 +163,6 @@ const getFile = () =>{
         if(res.data.code == 0){
             filelist.data = res.data.data
         }
-        console.log(filelist.data)
     })
 }
 
@@ -196,7 +197,6 @@ onMounted(async () => {
     // 加载项目信息
     await getinfo()
     infoForm.data = recordInfo.data[route.params.index]
-    console.log(infoForm.data)
     getType()
     getFile()
     getorder()
@@ -252,30 +252,67 @@ onMounted(async () => {
         </div>
 
 
-        <!--工单列表 -->
+        <!-- 工单列表 -->
         <div class="order">
             <h2>工单列表</h2>
             <el-empty v-if="orderForm.data==''" :image-size="100" />
-            <el-timeline v-else>
-                <el-timeline-item v-for="(item,index) in orderForm.data" center  placement="top">
-                <el-card>
-                    <template #header>
-                        <div class="card-header">
-                            <span>{{ item.name }}</span>
+            <el-table v-else :data="orderForm.data" style="width: 80%" :show-overflow-tooltip="true">
+                <el-table-column label="工单名称" prop="name" :width="200" />
+                <el-table-column label="工单状态" prop="state" :width="100">
+                    <template #default="scope">
+                        <el-tag
+                        :type="scope.row.tag === 'start' ? '' : 'success'"
+                        disable-transitions
+                        >{{ scope.row.state }}</el-tag
+                        >
+                    </template>
+                </el-table-column>
+                <el-table-column label="建设单位意见" prop="ownerOp" :width="150">
+                    <template #default="scope">
+                        <div v-if="scope.row.ownerOp==''" style="display: flex; align-items: center">
+                            <el-icon color="#F56C6C"><Timer /></el-icon>
+                            <span style="margin-left: 10px;color: #F56C6C;">待审核</span>
+                        </div>
+                        <div v-else style="display: flex; align-items: center">
+                            <span>{{ scope.row.ownerOp }}</span>
                         </div>
                     </template>
-                    <el-descriptions class="description" :column="1">
-                        <el-descriptions-item label="工单名称:">{{ item.name }}</el-descriptions-item>
-                        <el-descriptions-item label="工单状态:">{{ item.state }}</el-descriptions-item>
-                        <el-descriptions-item label="建设单位意见:">{{ item.ownerOp }}</el-descriptions-item>
-                        <el-descriptions-item label="设计单位意见:">{{ item.designOp }}</el-descriptions-item>
-                        <el-descriptions-item label="施工单位意见:">{{ item.constructOp }}</el-descriptions-item>
-                        <el-descriptions-item label="监理意见:">{{ item.superviseOp }}</el-descriptions-item>
-                        <el-descriptions-item label="工单备注:">{{ item.notes }}</el-descriptions-item>
-                    </el-descriptions>
-                </el-card>
-                </el-timeline-item>
-            </el-timeline>
+                </el-table-column>
+                <el-table-column label="设计单位意见" prop="designOp" :width="150">
+                    <template #default="scope">
+                        <div v-if="scope.row.designOp==''" style="display: flex; align-items: center">
+                            <el-icon color="#F56C6C"><Timer /></el-icon>
+                            <span style="margin-left: 10px;color: #F56C6C;">待审核</span>
+                        </div>
+                        <div v-else style="display: flex; align-items: center">
+                            <span>{{ scope.row.designOp }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="施工单位意见" prop="constructOp" :width="150">
+                    <template #default="scope">
+                        <div v-if="scope.row.constructOp==''" style="display: flex; align-items: center">
+                            <el-icon color="#F56C6C"><Timer /></el-icon>
+                            <span style="margin-left: 10px;color: #F56C6C;">待审核</span>
+                        </div>
+                        <div v-else style="display: flex; align-items: center">
+                            <span>{{ scope.row.constructOp }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="监理意见" prop="superviseOp"  :width="150">
+                    <template #default="scope">
+                        <div v-if="scope.row.superviseOp==''" style="display: flex; align-items: center">
+                            <el-icon color="#F56C6C"><Timer /></el-icon>
+                            <span style="margin-left: 10px;color: #F56C6C;">待审核</span>
+                        </div>
+                        <div v-else style="display: flex; align-items: center">
+                            <span>{{ scope.row.superviseOp }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="备注" prop="notes" />
+            </el-table>
         </div>
 
 
@@ -341,6 +378,7 @@ onMounted(async () => {
 <style scoped>
 .container {
     width: 100%;
+    margin-bottom: 50px;
 }
 
 .projectcard {
@@ -363,14 +401,6 @@ onMounted(async () => {
     white-space: pre-wrap;
 }
 
-.order{
-    width: 90%;
-    margin: auto;
-}
-.order .el-card{
-    width: 94%;
-    text-align: left;
-}
 .el-table{
     margin: auto;
 }

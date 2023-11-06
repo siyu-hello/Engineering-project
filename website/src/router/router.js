@@ -34,8 +34,12 @@ const routes = [
     {
         path:"/homepage",
         component: () => import("../views/HomePage.vue"),
-        redirect: JudgeAuthor,
+        redirect: "/index",
         children:[
+            {
+                path: "/index",
+                component: () => import("../views/index.vue")
+            },
             {
                 path: "/project",
                 component: () => import("../views/Project.vue")

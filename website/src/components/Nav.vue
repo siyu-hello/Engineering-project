@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import axios from 'axios'
-import { CircleCheck,Upload,Setting,Tickets } from '@element-plus/icons-vue'
+import { HomeFilled,Upload,Setting,Tickets } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import router from '../router/router';
 const activeindex = ref(location.pathname)
@@ -26,9 +26,6 @@ const outLogin = () =>{
 
 <template>
     <div class="container">
-        <el-avatar
-        src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-        />
         <el-menu
         active-text-color="#ffd04b"
         background-color="#545c64"
@@ -36,17 +33,21 @@ const outLogin = () =>{
         text-color="#fff"
         :router="true"
        >
+       <el-menu-item index="/index">
+          <el-icon><HomeFilled /></el-icon>
+          <span>平台首页</span>
+        </el-menu-item>
         <el-menu-item v-if="type=='owner'" index="/project">
           <el-icon><Tickets /></el-icon>
-          <span>项目</span>
-        </el-menu-item>
-        <el-menu-item index="/record">
-          <el-icon><Tickets /></el-icon>
-          <span>子项目</span>
+          <span>项目列表</span>
         </el-menu-item>
         <el-menu-item v-if="type=='owner'" index="/upload">
           <el-icon><Upload /></el-icon>
-          <span>发布</span>
+          <span>发布项目</span>
+        </el-menu-item>
+        <el-menu-item index="/record">
+          <el-icon><Tickets /></el-icon>
+          <span>我的项目</span>
         </el-menu-item>
         <el-menu-item index="/setting">
           <el-icon><Setting /></el-icon>
@@ -91,6 +92,7 @@ const outLogin = () =>{
     margin-top: 20px;
 }
 .el-menu{
+  font-size: 10px;
     border:0!important;
 }
 .outLogin{

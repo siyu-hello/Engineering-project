@@ -7,6 +7,7 @@ import { ElMessage } from 'element-plus'
 import useProjectInfo from '../pinia/project'
 
 const projectInfo = useProjectInfo()
+const projecttotal = ref()
 
 const formInfo = [{
         prop:'code',
@@ -51,6 +52,7 @@ const getProject = async() =>{
         if(res.data.code===0){
             projectform.data=res.data.data
             projectInfo.data = res.data.data
+            projecttotal.value = res.data.data.length
         }
     }catch(err){
         console.log(err)
@@ -79,7 +81,7 @@ const getDetail= (index,id) =>{
             </template>
             <el-table 
             :data="projectform.data" 
-            style="width: 90%"
+            style="width: 95%"
             :header-cell-style="{ textAlign: 'center' }"
             :cell-style="{ textAlign: 'center' }">
                 <el-table-column 

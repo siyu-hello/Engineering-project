@@ -25,8 +25,7 @@ const rules = {
     workload:[
         {required: true, message: '请输入预计工作量', trigger: 'blur'},
         { type:'number',message: '请输入数字'},
-    ],
-    notes:{required: true, message: '请输入项目简介', trigger: 'blur'}
+    ]
 }
 
 const reset= () =>{
@@ -44,7 +43,6 @@ const upload= () =>{
             FormRef.value.resetFields()
         }
         else{
-            console.log(res)
             ElMessage.error('出错了！')
         }
       })
@@ -72,7 +70,7 @@ const upload= () =>{
                 <el-input v-model="form.code" />
             </el-form-item>
             <el-form-item label="项目金额"  prop="money">
-                <el-input v-model.number="form.money" />
+                <el-input v-model.number="form.money" placeholder="请输入数字" />
             </el-form-item>
             <el-form-item label="项目简介"  prop="content">
                 <el-input 
@@ -84,7 +82,7 @@ const upload= () =>{
                 <el-input v-model="form.place" />
             </el-form-item>
             <el-form-item label="预估工作量"  prop="workload">
-                <el-input v-model.number="form.workload" />
+                <el-input v-model.number="form.workload" placeholder="请输入数字" />
             </el-form-item>
             <el-form-item label="备注"  prop="notes">
                 <el-input 
