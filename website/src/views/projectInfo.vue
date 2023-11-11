@@ -25,10 +25,9 @@ const formdata = reactive({
 })
 
 
-const handleChange1 = (file) =>{formdata.invite = file.raw;}
+const handleChange1 = (file) =>{formdata.invite = file.raw}
 const handleChange2 = (file) =>{formdata.success = file.raw}
 const handleChange3 = (file) =>{formdata.contract = file.raw}
-
 
 //创建子项目
 const FormVisible1 = ref(false)
@@ -92,11 +91,14 @@ const addconfirm = () =>{
     //上传各单位
     if(title.value=='添加设计单位'){
         axios.post('/api/add/design/',Data)
-        .then((res)=>{
+        .then(async (res)=>{
             if(res.data.code==0){
                 ElMessage.success('添加成功！')
-                getRecord()
+                await getRecord()
+                let index = sessionStorage.getItem('index')
+                recorddetail.data = recordForm.data[index]
                 FormVisible.value = false
+                closeDialog()
             }
             else{
                 ElMessage.error('出错了！')
@@ -105,12 +107,14 @@ const addconfirm = () =>{
     }
     else if(title.value=='添加监理单位'){
         axios.post('/api/add/super/',Data)
-        .then((res)=>{
+        .then(async (res)=>{
             if(res.data.code==0){
                 ElMessage.success('添加成功！')
-                getRecord()
+                await getRecord()
+                let index = sessionStorage.getItem('index')
+                recorddetail.data = recordForm.data[index]
                 FormVisible.value = false
-                console.log(Data.get('company_id'))
+                closeDialog()
             }
             else{
                 ElMessage.error('出错了！')
@@ -119,11 +123,14 @@ const addconfirm = () =>{
     }
     else if(title.value=='添加施工单位'){
         axios.post('/api/add/construct/',Data)
-        .then((res)=>{
+        .then(async (res)=>{
             if(res.data.code==0){
                 ElMessage.success('添加成功！')
-                getRecord()
+                await getRecord()
+                let index = sessionStorage.getItem('index')
+                recorddetail.data = recordForm.data[index]
                 FormVisible.value = false
+                closeDialog()
             }
             else{
                 ElMessage.error('出错了！')
@@ -133,11 +140,16 @@ const addconfirm = () =>{
 }
 
 //清空
+const upload1 = ref()
+const upload2 = ref()
+const upload3 = ref()
 const closeDialog = () =>{
     for (let key in formdata) {
         formdata[key] = ' ';
       }
-
+    upload1.value.clearFiles()
+    upload2.value.clearFiles()
+    upload3.value.clearFiles()
     FormVisible.value = false
 }
 const closeDialog1 = () =>{
@@ -168,8 +180,18 @@ const getRecord = async () => {
     }
 }
 
+// 查看各子项目详情
+const recorddetail = reactive({data:{}})
+const FormVisible2 = ref(false)
+const getDetail= (index) =>{
+    sessionStorage.setItem("index",index)
+    recorddetail.data = recordForm.data[index]
+    FormVisible2.value = true
+}
+
 // 下载文件
 const downloadFile=(url)=> {
+    var str = url
     axios.get(`/api/media/${url}`, {
         responseType: 'blob', // 设置响应类型为 Blob，以便处理文件
     }).then(
@@ -177,7 +199,8 @@ const downloadFile=(url)=> {
         const link = document.createElement('a');
         const url = URL.createObjectURL(res.data);
         link.href = url;
-        link.download = '文件';
+        var obj=str.lastIndexOf("/")
+        link.download = str.substr(obj+1);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -206,7 +229,7 @@ const getinfo = async () => {
 const typeform = reactive({data:[]})
 const getType = async() =>{
     try{
-        let res = await axios.get('/api/table/type/')
+        let res = await axios.get('/api/project/type/')
         if(res.data.code===0){
             typeform.data=res.data.data
         }
@@ -252,79 +275,86 @@ onMounted(async () => {
         <div class="record">
             <h2>子项目列表</h2>
             <el-empty v-if="recordForm.data==''" :image-size="100" />
-            <el-table v-else :data="recordForm.data" :border="ture" style="width: 100%" :show-overflow-tooltip="true">
-                <el-table-column type="expand">
-                <template #default="props">
-                    <el-descriptions
-                        direction="vertical"
-                        :column="4"
-                        :size="default"
-                        style="width: 95%;margin-left: 5%;max-width: 95%;"
-                        border
-                    >
-                        <el-descriptions-item label="项目地点">{{ props.row.place }}</el-descriptions-item>
-                        <el-descriptions-item label="预估工作量">{{ props.row.workload }}</el-descriptions-item>
-                        <el-descriptions-item label="建设单位" :span="2">{{ props.row.ownerUnit }}</el-descriptions-item>
-                        <el-descriptions-item v-if="props.row.designUnit==''" label="设计单位">
-                            <el-button type="danger" plain size="small" @click="addUnit('添加设计单位','designUnit',props.row.subPro_id)" >+添加</el-button>
-                        </el-descriptions-item>
-                        <el-descriptions-item v-if="props.row.designUnit!=''" label="设计单位">{{ props.row.designUnit }}</el-descriptions-item>
-                        <el-descriptions-item v-if="props.row.designUnit!=''" label="设计招标文件">
-                            <el-button type="primary" plain size="small" :icon="Download" @click="downloadFile(props.row.designInvite)">下载</el-button>
-                        </el-descriptions-item>
-                        <el-descriptions-item v-if="props.row.designUnit!=''" label="设计中标文件">
-                            <el-button type="primary" plain size="small" :icon="Download" @click="downloadFile(props.row.designSuccess)">下载</el-button>
-                        </el-descriptions-item>
-                        <el-descriptions-item v-if="props.row.designUnit!=''" label="设计合同">
-                            <el-button type="primary" plain size="small" :icon="Download" @click="downloadFile(props.row.designContract)">下载</el-button>
-                        </el-descriptions-item>
-
-
-                        <el-descriptions-item v-if="props.row.superviseUnit==''" label="监理单位">
-                            <el-button type="danger" plain size="small" @click="addUnit('添加监理单位','superviseUnit',props.row.subPro_id)" >+添加</el-button>
-                        </el-descriptions-item>
-                        <el-descriptions-item v-if="props.row.superviseUnit!=''" label="监理单位">{{ props.row.superviseUnit }}</el-descriptions-item>
-                        <el-descriptions-item v-if="props.row.superviseUnit!=''" label="监理招标文件">
-                            <el-button type="primary" plain size="small" :icon="Download" @click="downloadFile(props.row.superInvite)">下载</el-button>
-                        </el-descriptions-item>
-                        <el-descriptions-item v-if="props.row.superviseUnit!=''" label="监理中标文件">
-                            <el-button type="primary" plain size="small" :icon="Download" @click="downloadFile(props.row.superSuccess)">下载</el-button>
-                        </el-descriptions-item>
-                        <el-descriptions-item v-if="props.row.superviseUnit!=''" label="监理合同">
-                            <el-button type="primary" plain size="small" :icon="Download" @click="downloadFile(props.row.superContract)">下载</el-button>
-                        </el-descriptions-item>
-
-
-                        <el-descriptions-item v-if="props.row.constructUnit==''" label="施工单位">
-                            <el-button type="danger" plain size="small" @click="addUnit('添加施工单位','constructUnit',props.row.subPro_id)" >+添加</el-button>
-                        </el-descriptions-item>
-                        <el-descriptions-item v-if="props.row.constructUnit!=''" label="施工单位">{{ props.row.constructUnit }}</el-descriptions-item>
-                        <el-descriptions-item v-if="props.row.constructUnit!=''" label="施工招标文件">
-                            <el-button type="primary" plain size="small" :icon="Download" @click="downloadFile(props.row.constructInvite)">下载</el-button>
-                        </el-descriptions-item>
-                        <el-descriptions-item v-if="props.row.constructUnit!=''" label="施工中标文件">
-                            <el-button type="primary" plain size="small" :icon="Download" @click="downloadFile(props.row.constructSuccess)">下载</el-button>
-                        </el-descriptions-item>
-                        <el-descriptions-item v-if="props.row.constructUnit!=''" label="施工合同">
-                            <el-button type="primary" plain size="small" :icon="Download" @click="downloadFile(props.row.constructContract)">下载</el-button>
-                        </el-descriptions-item>
-
-                        <el-descriptions-item label="勘察单位">{{ props.row.surveyUnit }}</el-descriptions-item>
-                        <el-descriptions-item label="备注">{{ props.row.notes }}</el-descriptions-item>
-                    </el-descriptions>
-                </template>
-                </el-table-column>
+            <el-table v-else :data="recordForm.data" style="width: 100%" :show-overflow-tooltip="true">
                 <el-table-column label="项目名称" prop="name" />
                 <el-table-column label="项目内容" prop="content" />
+                <el-table-column label="操作">
+                    <template #default="scope">
+                        <el-button type="primary" size="small" @click="getDetail(scope.$index)">展开更多</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
         </div>
+
+
+        <!-- 各子项目详情 -->
+        <el-dialog v-model="FormVisible2" title="项目详情">
+            <el-descriptions
+                direction="vertical"
+                :column="4"
+                style="width: 95%;margin-left: 5%;max-width: 95%;"
+                border
+            >
+                <el-descriptions-item label="项目名称">{{ recorddetail.data.name }}</el-descriptions-item>
+                <el-descriptions-item label="预估内容" :span="2">{{ recorddetail.data.content }}</el-descriptions-item>
+                <el-descriptions-item label="项目地点">{{ recorddetail.data.place }}</el-descriptions-item>
+                <el-descriptions-item label="预估工作量">{{ recorddetail.data.workload }}</el-descriptions-item>
+                <el-descriptions-item label="建设单位" :span="3">{{ recorddetail.data.ownerUnit }}</el-descriptions-item>
+                <el-descriptions-item v-if="recorddetail.data.designUnit==''" label="设计单位">
+                    <el-button type="danger" plain size="small" @click="addUnit('添加设计单位','designUnit',recorddetail.data.subPro_id)" >+添加</el-button>
+                </el-descriptions-item>
+                <el-descriptions-item v-if="recorddetail.data.designUnit!=''" label="设计单位">{{ recorddetail.data.designUnit }}</el-descriptions-item>
+                <el-descriptions-item v-if="recorddetail.data.designUnit!=''" label="设计招标文件">
+                    <el-button type="primary" plain size="small" :icon="Download" @click="downloadFile(recorddetail.data.designInvite)">下载</el-button>
+                </el-descriptions-item>
+                <el-descriptions-item v-if="recorddetail.data.designUnit!=''" label="设计中标文件">
+                    <el-button type="primary" plain size="small" :icon="Download" @click="downloadFile(recorddetail.data.designSuccess)">下载</el-button>
+                </el-descriptions-item>
+                <el-descriptions-item v-if="recorddetail.data.designUnit!=''" label="设计合同">
+                    <el-button type="primary" plain size="small" :icon="Download" @click="downloadFile(recorddetail.data.designContract)">下载</el-button>
+                </el-descriptions-item>
+
+
+                <el-descriptions-item v-if="recorddetail.data.superviseUnit==''" label="监理单位">
+                    <el-button type="danger" plain size="small" @click="addUnit('添加监理单位','superviseUnit',recorddetail.data.subPro_id)" >+添加</el-button>
+                </el-descriptions-item>
+                <el-descriptions-item v-if="recorddetail.data.superviseUnit!=''" label="监理单位">{{ recorddetail.data.superviseUnit }}</el-descriptions-item>
+                <el-descriptions-item v-if="recorddetail.data.superviseUnit!=''" label="监理招标文件">
+                    <el-button type="primary" plain size="small" :icon="Download" @click="downloadFile(recorddetail.data.superInvite)">下载</el-button>
+                </el-descriptions-item>
+                <el-descriptions-item v-if="recorddetail.data.superviseUnit!=''" label="监理中标文件">
+                    <el-button type="primary" plain size="small" :icon="Download" @click="downloadFile(recorddetail.data.superSuccess)">下载</el-button>
+                </el-descriptions-item>
+                <el-descriptions-item v-if="recorddetail.data.superviseUnit!=''" label="监理合同">
+                    <el-button type="primary" plain size="small" :icon="Download" @click="downloadFile(recorddetail.data.superContract)">下载</el-button>
+                </el-descriptions-item>
+
+
+                <el-descriptions-item v-if="recorddetail.data.constructUnit==''" label="施工单位">
+                    <el-button type="danger" plain size="small" @click="addUnit('添加施工单位','constructUnit',recorddetail.data.subPro_id)" >+添加</el-button>
+                </el-descriptions-item>
+                <el-descriptions-item v-if="recorddetail.data.constructUnit!=''" label="施工单位">{{ recorddetail.data.constructUnit }}</el-descriptions-item>
+                <el-descriptions-item v-if="recorddetail.data.constructUnit!=''" label="施工招标文件">
+                    <el-button type="primary" plain size="small" :icon="Download" @click="downloadFile(recorddetail.data.constructInvite)">下载</el-button>
+                </el-descriptions-item>
+                <el-descriptions-item v-if="recorddetail.data.constructUnit!=''" label="施工中标文件">
+                    <el-button type="primary" plain size="small" :icon="Download" @click="downloadFile(recorddetail.data.constructSuccess)">下载</el-button>
+                </el-descriptions-item>
+                <el-descriptions-item v-if="recorddetail.data.constructUnit!=''" label="施工合同">
+                    <el-button type="primary" plain size="small" :icon="Download" @click="downloadFile(recorddetail.data.constructContract)">下载</el-button>
+                </el-descriptions-item>
+
+                <el-descriptions-item label="勘察单位">{{recorddetail.data.surveyUnit }}</el-descriptions-item>
+                <el-descriptions-item label="备注">{{ recorddetail.data.notes }}</el-descriptions-item>
+            </el-descriptions>
+        </el-dialog>
 
         <!-- 添加相关单位 -->
         <el-dialog v-model="FormVisible" :title="title" @close="closeDialog">
             <el-form :model="formdata">
                 <el-form-item label="招标文件:" prop="invite">
                     <el-upload
-                    ref="upload"
+                    ref="upload1"
                     :limit="1"
                     :on-change="handleChange1"
                     :auto-upload="false">
@@ -335,7 +365,7 @@ onMounted(async () => {
                 </el-form-item>
                 <el-form-item label="中标文件:" prop="success">
                     <el-upload
-                    ref="upload"
+                    ref="upload2"
                     :limit="1"
                     :on-change="handleChange2"
                     :auto-upload="false">
@@ -346,7 +376,7 @@ onMounted(async () => {
                 </el-form-item>
                 <el-form-item label="合同文件:" prop="contract">
                     <el-upload
-                    ref="upload"
+                    ref="upload3"
                     :limit="1"
                     :on-change="handleChange3"
                     :auto-upload="false">
@@ -390,11 +420,11 @@ onMounted(async () => {
                     <el-input v-model.number="recorddata.workload" />
                 </el-form-item>
                 <el-form-item label="项目类型" prop="proType">
-                    <el-select v-model="recorddata.proType_id" placeholder="请选择所属项目">
+                    <el-select v-model="recorddata.proType_id" placeholder="请选择项目类型">
                         <el-option
                         v-for="item in typeform.data"
                         :label="item.name"
-                        :value="item.tableType_id"/>
+                        :value="item.proType_id"/>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="勘测单位:" prop="surveyUnit">
@@ -412,7 +442,7 @@ onMounted(async () => {
             </el-form>
             <template #footer>
             <span class="dialog-footer">
-                <el-button @click="FormVisible = false">取消</el-button>
+                <el-button @click="FormVisible1 = false">取消</el-button>
                 <el-button type="primary" @click="addrecord()">
                 添加
                 </el-button>

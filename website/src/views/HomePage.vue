@@ -32,6 +32,7 @@ import Top from "../components/Top.vue"
 }
 .el-header{
     padding: 0;
+    background-color: #f8f7f7;
 }
 .el-aside{
     width: 10%;
@@ -39,7 +40,7 @@ import Top from "../components/Top.vue"
 }
 .el-main{
     padding: 0;
-    background-color: #fafafa;
+    background-color: #f8f7f7;
 }
 </style>
 

@@ -1,31 +1,29 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
 import axios from 'axios'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import userecordInfo from '../pinia/record'
 import { ElMessage } from 'element-plus'
 import { Timer } from '@element-plus/icons-vue'
+import useorderInfo from '../pinia/order'
+// import router from '../router/router';
+
+const orderInfo = useorderInfo()
 
 
 const route = useRoute()
+const router = useRouter()
 const recordInfo = userecordInfo()
 const infoForm = reactive({ data: {} })
 
 
 const FormVisible1 = ref(false)
-const FormVisible2 = ref(false)
 
 const formdata = reactive({
     subPro_id:'',
-    tableType_id:'',
     notes:''
 })
 
-const filedata = reactive({
-    name:'',
-    record_id:'',
-    file:''
-})
 
 //创建工单
 
@@ -44,64 +42,6 @@ const createConfirm = ()=>{
       })
 }
 
-//上传附件
-const handleChange = (file) =>{filedata.file = file.raw;}
-const uploadFile = () =>{
-    filedata.record_id = route.params.id
-    const Data = new FormData();
-    for (let[key,value] of Object.entries(filedata)) {
-        Data.append(key, value)
-    }
-    axios.post('/api/file/',Data)
-    .then((res)=>{
-        if(res.data.code==0){
-            ElMessage.success('附件上传成功')
-            getFile()
-            FormVisible2.value = false
-        }
-        else{
-            ElMessage.error('出错了！')
-        }
-    })
-}
-
-// 下载附件
-const handledown = (url,fileName) =>{
-    axios.get(`/api/media/${url}`, {
-        responseType: 'blob', // 设置响应类型为 Blob，以便处理文件
-    }).then(
-        res => {
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(res.data);
-        link.href = url;
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-        },
-        err=>{
-        console.log(err)
-         }
-    )
-}
-
-// 删除附件
-const handleDelete = (id) =>{
-    console.log(id)
-    axios.delete('/api/file/',{data:{"file_id":id}})
-    .then((res)=>{
-        console.log(res)
-        if(res.data.code==0){
-            ElMessage.success('删除成功')
-            getFile()
-        }
-        else{
-            ElMessage.error('出错了！')
-        }
-    })
-    .catch((err)=>{console.log(err)})
-}
 
 //清空
 const closeDialog1 = () =>{
@@ -110,13 +50,6 @@ const closeDialog1 = () =>{
       }
 
     FormVisible1.value = false
-}
-const closeDialog2 = () =>{
-    for (let key in filedata) {
-        filedata[key] = ' ';
-      }
-
-    FormVisible2.value = false
 }
 
 
@@ -146,6 +79,7 @@ const getorder = () =>{
             for(let i in data){
                 if(data[i].project_id==route.params.id){
                     orderForm.data[j]=data[i]
+                    orderInfo.data[j]=data[i]
                     j++
                 }
             }
@@ -153,55 +87,18 @@ const getorder = () =>{
     })
 }
 
-// 获取所有的附件
-const filelist = reactive({data:[]})
-const getFile = () =>{
-    axios.post('/api/seek/file/',{
-        "record_id":route.params.id
-    })
-    .then((res)=>{
-        if(res.data.code == 0){
-            filelist.data = res.data.data
-        }
-    })
-}
-
-const list = [
-    {
-        prop:'name',
-        label:'名称',
-        width:'400'
-    },
-    {
-        prop:'company',
-        label:'单位',
-        width:'200'
-    }
-]
-
-//获取所有类型
-const typeform = reactive({data:[]})
-const getType = async() =>{
-    try{
-        let res = await axios.get('/api/table/type/')
-        if(res.data.code===0){
-            typeform.data=res.data.data
-        }
-    }catch(err){
-        console.log(err)
-    }
-}
-
 // 生命周期中监听
 onMounted(async () => {
     // 加载项目信息
     await getinfo()
     infoForm.data = recordInfo.data[route.params.index]
-    getType()
-    getFile()
     getorder()
 })
 
+const getDetail= (index,id) =>{
+    router.push({name:'orderinfo',params:{id:id}})
+    // router.push({path:'/orderInfo',params:{id:id}})
+}
 
 </script>
 
@@ -213,7 +110,7 @@ onMounted(async () => {
                     <span>项目详情</span>
                     <div class="btn">
                     <el-button type="primary" class="button" @click="FormVisible1 = true">+创建工单</el-button>
-                    <el-button type="primary" class="button" @click="FormVisible2 = true">+上传附件</el-button>
+                    <!-- <el-button type="primary" class="button" @click="FormVisible2 = true">+上传附件</el-button> -->
                     </div>
                 </div>
             </template>
@@ -230,26 +127,6 @@ onMounted(async () => {
                 <el-descriptions-item label="项目备注:">{{ infoForm.data.notes }}</el-descriptions-item>
             </el-descriptions>
         </el-card>
-
-        <!-- 附件列表 -->
-        <div class="file">
-            <h2>附件列表</h2>
-            <el-empty v-if="filelist.data==''" :image-size="100" />
-            <el-table v-else :data="filelist.data" style="width: 80%" :header-cell-style="{ textAlign: 'center' }" :cell-style="{ textAlign: 'center' }">
-                <el-table-column 
-                v-for="item in list" 
-                :prop="item.prop" 
-                :label="item.label" 
-                :width="item.width"
-                :show-overflow-tooltip="true" />
-                <el-table-column label="操作">
-                    <template #default="scope">
-                        <el-button size="small" @click="handledown(scope.row.path,scope.row.name)">下载</el-button>
-                        <el-button size="small" type="danger" @click="handleDelete(scope.row.file_id)">删除</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
 
 
         <!-- 工单列表 -->
@@ -311,23 +188,19 @@ onMounted(async () => {
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column label="备注" prop="notes" />
+                <el-table-column label="操作">
+                    <template #default="scope">
+                        <el-button type="primary" size="small" @click="getDetail(scope.$index,scope.row.record_id)">展开更多</el-button>
+                    </template>
+                </el-table-column>
+
             </el-table>
         </div>
-
 
 
          <!-- 创建工单 -->
          <el-dialog v-model="FormVisible1" title="创建工单" @close="closeDialog1">
             <el-form :model="formdata">
-                <el-form-item label="类型" prop="tableType_id">
-                    <el-select v-model="formdata.tableType_id" placeholder="请选择表类型">
-                        <el-option
-                        v-for="item in typeform.data"
-                        :label="item.name"
-                        :value="item.tableType_id"/>
-                    </el-select>
-                </el-form-item>
                 <el-form-item label="项目备注" prop="notes">
                     <el-input 
                     v-model="formdata.notes"
@@ -340,34 +213,6 @@ onMounted(async () => {
                 <el-button @click="FormVisible1 = false">取消</el-button>
                 <el-button type="primary" @click="createConfirm()">
                 添加
-                </el-button>
-            </span>
-            </template>
-        </el-dialog>
-
-        <!-- 上传附件 -->
-        <el-dialog v-model="FormVisible2" title="上传附件" @close="closeDialog2">
-            <el-form :model="filedata">
-                <el-form-item label="名称：" prop="name">
-                    <el-input v-model="filedata.name" />
-                </el-form-item>
-                <el-form-item label="附件：" prop="file">
-                    <el-upload
-                    ref="upload"
-                    :limit="1"
-                    :on-change="handleChange"
-                    :auto-upload="false">
-                        <template #trigger>
-                            <el-button type="primary">选择文件</el-button>
-                        </template>
-                    </el-upload>
-                </el-form-item>
-            </el-form>
-            <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="FormVisible2 = false">取消</el-button>
-                <el-button type="primary" @click="uploadFile()">
-                确认
                 </el-button>
             </span>
             </template>
@@ -393,6 +238,7 @@ onMounted(async () => {
     font-size: 15px;
     font-weight: bold;
 }
+
 
 
 .description {
