@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
-import axios from 'axios'
+import service from "../utils/request";
 import { useRoute, useRouter } from 'vue-router'
 import userecordInfo from '../pinia/record'
 import { ElMessage } from 'element-plus'
@@ -29,7 +29,7 @@ const formdata = reactive({
 
 const createConfirm = ()=>{
     formdata.subPro_id = route.params.id
-    axios.post('/api/record/',formdata)
+    service.post('/record/',formdata)
       .then((res)=>{
         if(res.data.code===0){
             ElMessage.success('工单创建成功')
@@ -57,7 +57,7 @@ const getinfo = async () => {
     // pinia刷新时不会保留数据，需要重新获取
     if (recordInfo.data.length === 0) {
         try {
-            let res = await axios.get('/api/sub/project/')
+            let res = await service.get('/sub/project/')
             if (res.data.code === 0) {
                 recordInfo.data = res.data.data
             }
@@ -71,7 +71,7 @@ const getinfo = async () => {
 const orderForm = reactive({ data: [] }) 
 var j = 0
 const getorder = () =>{
-    axios.get('/api/record/')
+    service.get('/record/')
     .then((res)=>{
         if(res.data.code==0){
             let data = res.data.data
@@ -133,8 +133,8 @@ const getDetail= (index,id) =>{
         <div class="order">
             <h2>工单列表</h2>
             <el-empty v-if="orderForm.data==''" :image-size="100" />
-            <el-table v-else :data="orderForm.data" style="width: 80%" :show-overflow-tooltip="true">
-                <el-table-column label="工单名称" prop="name" :width="200" />
+            <el-table v-else :data="orderForm.data" style="width: 80%">
+                <el-table-column label="工单名称" :show-overflow-tooltip="true" prop="name" :width="200" />
                 <el-table-column label="工单状态" prop="state" :width="100">
                     <template #default="scope">
                         <el-tag

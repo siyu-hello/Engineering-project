@@ -1,5 +1,6 @@
 <script setup>
 import axios from 'axios'
+import service from "../utils/request";
 import { onMounted,reactive,ref } from 'vue';
 import router from '../router/router';
 import bus from '../utils/bus'
@@ -48,7 +49,7 @@ const formInfo = [{
 const projectform = reactive({data:[]})
 const getProject = async() =>{
     try{
-        let res = await axios.get('/api/project/')
+        let res = await service.get('/project/')
         if(res.data.code===0){
             projectform.data=res.data.data
             projectInfo.data = res.data.data

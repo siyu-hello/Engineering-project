@@ -1,6 +1,6 @@
 <script setup>
 import { reactive } from 'vue'
-import axios from 'axios'
+import service from "../utils/request";
 import { User,Lock } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import router from '../router/router';
@@ -37,7 +37,7 @@ const rules = {
 }
 
 const login=()=>{
-    axios.post('/api/login/',ruleForm)
+    service.post('/login/',ruleForm)
     .then((res)=>{
         if(res.data.code === 0){
             sessionStorage.setItem("sessionid",res.data.data.sessionid)

@@ -25,10 +25,13 @@ import Top from "../components/Top.vue"
 <style scoped>
 .container{
     margin: auto;
+    width: 100%;
 }
 .bigbox{
     height: 100vh;
     width: 100vw;
+    min-width: 1250px;
+    min-height: 750px;
 }
 .el-header{
     padding: 0;

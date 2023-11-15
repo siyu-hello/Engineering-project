@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
-import axios from 'axios'
+import service from "../utils/request";
 import { ElMessage } from 'element-plus'
 import useorderInfo from '../pinia/order'
 import router from '../router/router';
@@ -51,7 +51,7 @@ const addEngineMeasure= (id) =>{
     FormVisible1.value = true
 }
 const addEMconfirm= () =>{
-    axios.post('/api/add/engine/measure/',EMdata)
+    service.post('/add/engine/measure/',EMdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -75,7 +75,7 @@ const addWorkContact= (id) =>{
     FormVisible2.value = true
 }
 const addWCconfirm= () =>{
-    axios.post('/api/add/work/contact/ ',WCdata)
+    service.post('/add/work/contact/ ',WCdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -107,7 +107,7 @@ const addSWorkContact= (id) =>{
     FormVisible3.value = true
 }
 const addSWCconfirm= () =>{
-    axios.post('/api/add/swork/contact/ ',SWCdata)
+    service.post('/add/swork/contact/ ',SWCdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -131,7 +131,7 @@ const addChangContact= (id) =>{
     FormVisible4.value = true
 }
 const addCCconfirm= () =>{
-    axios.post('/api/add/change/contact/ ',CCdata)
+    service.post('/add/change/contact/ ',CCdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -162,7 +162,7 @@ const addSuperMeeting= (id) =>{
     FormVisible5.value = true
 }
 const addSMconfirm= () =>{
-    axios.post('/api/add/super/meeting/ ',SMdata)
+    service.post('/add/super/meeting/ ',SMdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -200,7 +200,7 @@ const addConstructLog= (id) =>{
     FormVisible6.value = true
 }
 const addCLconfirm= () =>{
-    axios.post('/api/add/construct/log/ ',CLdata)
+    service.post('/add/construct/log/ ',CLdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -228,7 +228,7 @@ const addDealLog= (id) =>{
     FormVisible8.value = true
 }
 const addDLconfirm= () =>{
-    axios.post('/api/add/deal/log/ ',DLdata)
+    service.post('/add/deal/log/ ',DLdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -263,7 +263,7 @@ const addSuperLog= (id) =>{
     FormVisible7.value = true
 }
 const addSLconfirm= () =>{
-    axios.post('/api/add/super/log/ ',SLdata)
+    service.post('/add/super/log/ ',SLdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -293,7 +293,7 @@ const addDrawingReview= (id) =>{
     FormVisible9.value = true
 }
 const addDRconfirm= () =>{
-    axios.post('/api/add/drawing/review/ ',DRdata)
+    service.post('/add/drawing/review/ ',DRdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -319,7 +319,7 @@ const addDesignChange= (id) =>{
     FormVisible10.value = true
 }
 const addDCconfirm= () =>{
-    axios.post('/api/add/design/change/',DCdata)
+    service.post('/add/design/change/',DCdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -341,7 +341,7 @@ const uploadFile = () =>{
     for (let[key,value] of Object.entries(filedata)) {
         Data.append(key, value)
     }
-    axios.post('/api/file/',Data)
+    service.post('/file/',Data)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('附件上传成功')
@@ -358,7 +358,7 @@ const uploadFile = () =>{
 
 // 下载附件
 const handledown = (url,fileName) =>{
-    axios.get(`/api/media/${url}`, {
+    service.get(`/media/${url}`, {
         responseType: 'blob', // 设置响应类型为 Blob，以便处理文件
     }).then(
         res => {
@@ -380,7 +380,7 @@ const handledown = (url,fileName) =>{
 // 删除附件
 const handleDelete = (id) =>{
     console.log(id)
-    axios.delete('/api/file/',{data:{"file_id":id}})
+    service.delete('/file/',{data:{"file_id":id}})
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('删除成功')
@@ -396,7 +396,7 @@ const handleDelete = (id) =>{
 // 获取所有的附件
 const filelist = reactive({data:[]})
 const getFile = () =>{
-    axios.post('/api/seek/file/',{
+    service.post('/seek/file/',{
         "record_id":route.params.id
     })
     .then((res)=>{
@@ -425,7 +425,7 @@ const orderForm = reactive({ data: [] })
 var j = 0
 const getorder = async() =>{
         try {
-            let res = await axios.get('/api/record/')
+            let res = await service.get('/record/')
             if (res.data.code === 0) {
                 let data = res.data.data
                 let valuableData = []
