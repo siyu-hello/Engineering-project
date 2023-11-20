@@ -1,5 +1,5 @@
 <script setup>
-import service from "../utils/request";
+import axios from 'axios'
 import { onMounted,reactive,ref } from 'vue';
 import router from '../router/router';
 import bus from '../utils/bus'
@@ -45,7 +45,7 @@ const formdata = reactive({
 
 const createConfirm = ()=>{
     console.log(formdata)
-    service.post('/record/',formdata)
+    axios.post('/api/record/',formdata)
       .then((res)=>{
         if(res.data.code===0){
             ElMessage.success('工单创建成功')
@@ -71,7 +71,7 @@ const closeDialog = () =>{
 const typeform = reactive({data:[]})
 const getType = async() =>{
     try{
-        let res = await service.get('/table/type/')
+        let res = await axios.get('/api/table/type/')
         if(res.data.code===0){
             typeform.data=res.data.data
         }
@@ -84,7 +84,7 @@ const getType = async() =>{
 const recordform = reactive({data:[]})
 const getRecord = async() =>{
     try{
-        let res = await service.get('/sub/project/')
+        let res = await axios.get('/api/sub/project/')
         if(res.data.code===0){
             recordform.data=res.data.data
             recordInfo.data = res.data.data

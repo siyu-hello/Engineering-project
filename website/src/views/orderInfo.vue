@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
-import service from "../utils/request";
+import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import useorderInfo from '../pinia/order'
 import router from '../router/router';
@@ -51,7 +51,7 @@ const addEngineMeasure= (id) =>{
     FormVisible1.value = true
 }
 const addEMconfirm= () =>{
-    service.post('/add/engine/measure/',EMdata)
+    axios.post('/api/add/engine/measure/',EMdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -75,7 +75,7 @@ const addWorkContact= (id) =>{
     FormVisible2.value = true
 }
 const addWCconfirm= () =>{
-    service.post('/add/work/contact/ ',WCdata)
+    axios.post('/api/add/work/contact/ ',WCdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -107,7 +107,7 @@ const addSWorkContact= (id) =>{
     FormVisible3.value = true
 }
 const addSWCconfirm= () =>{
-    service.post('/add/swork/contact/ ',SWCdata)
+    axios.post('/api/add/swork/contact/ ',SWCdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -131,7 +131,7 @@ const addChangContact= (id) =>{
     FormVisible4.value = true
 }
 const addCCconfirm= () =>{
-    service.post('/add/change/contact/ ',CCdata)
+    axios.post('/api/add/change/contact/ ',CCdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -162,7 +162,7 @@ const addSuperMeeting= (id) =>{
     FormVisible5.value = true
 }
 const addSMconfirm= () =>{
-    service.post('/add/super/meeting/ ',SMdata)
+    axios.post('/api/add/super/meeting/ ',SMdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -200,7 +200,7 @@ const addConstructLog= (id) =>{
     FormVisible6.value = true
 }
 const addCLconfirm= () =>{
-    service.post('/add/construct/log/ ',CLdata)
+    axios.post('/api/add/construct/log/ ',CLdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -228,7 +228,7 @@ const addDealLog= (id) =>{
     FormVisible8.value = true
 }
 const addDLconfirm= () =>{
-    service.post('/add/deal/log/ ',DLdata)
+    axios.post('/api/add/deal/log/ ',DLdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -263,7 +263,7 @@ const addSuperLog= (id) =>{
     FormVisible7.value = true
 }
 const addSLconfirm= () =>{
-    service.post('/add/super/log/ ',SLdata)
+    axios.post('/api/add/super/log/ ',SLdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -293,7 +293,7 @@ const addDrawingReview= (id) =>{
     FormVisible9.value = true
 }
 const addDRconfirm= () =>{
-    service.post('/add/drawing/review/ ',DRdata)
+    axios.post('/api/add/drawing/review/ ',DRdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -319,7 +319,7 @@ const addDesignChange= (id) =>{
     FormVisible10.value = true
 }
 const addDCconfirm= () =>{
-    service.post('/add/design/change/',DCdata)
+    axios.post('/api/add/design/change/',DCdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
@@ -332,6 +332,42 @@ const addDCconfirm= () =>{
     })
 }
 
+// 审批
+const opiniondata = reactive({
+    info:'',
+    record_id:'',
+    picture:''
+})
+const FormVisible11 = ref(false)
+const handleChange1 = (file)=>{opiniondata.picture = file.raw}
+const uploadopinion = () =>{
+    opiniondata.record_id = route.params.id
+    const opData = new FormData();
+    for (let[key,value] of Object.entries(opiniondata)) {
+        opData.append(key, value)
+    }
+    console.log(opiniondata)
+    axios.post('/api/create/opinion/',opData)
+    .then((res)=>{
+        if(res.data.code==0){
+            ElMessage.success('审批成功')
+            getorder()
+            FormVisible11.value = false
+            closeDialog1()
+        }else{
+            ElMessage.error('出错了')
+        }
+    })
+}
+const upload1 = ref()
+const closeDialog1 = () =>{
+    for (let key in opiniondata) {
+        opiniondata[key] = ' ';
+      }
+      upload1.value.clearFiles()
+    FormVisible11.value = false
+}
+
 //上传附件
 const handleChange = (file) =>{filedata.file = file.raw;}
 const uploadFile = () =>{
@@ -341,11 +377,10 @@ const uploadFile = () =>{
     for (let[key,value] of Object.entries(filedata)) {
         Data.append(key, value)
     }
-    service.post('/file/',Data)
+    axios.post('/api/file/',Data)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('附件上传成功')
-            console.log(res)
             getFile()
             FormVisible.value = false
             closeDialog()
@@ -358,7 +393,7 @@ const uploadFile = () =>{
 
 // 下载附件
 const handledown = (url,fileName) =>{
-    service.get(`/media/${url}`, {
+    axios.get(`/api/media/${url}`, {
         responseType: 'blob', // 设置响应类型为 Blob，以便处理文件
     }).then(
         res => {
@@ -380,7 +415,7 @@ const handledown = (url,fileName) =>{
 // 删除附件
 const handleDelete = (id) =>{
     console.log(id)
-    service.delete('/file/',{data:{"file_id":id}})
+    axios.delete('/api/file/',{data:{"file_id":id}})
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('删除成功')
@@ -396,7 +431,7 @@ const handleDelete = (id) =>{
 // 获取所有的附件
 const filelist = reactive({data:[]})
 const getFile = () =>{
-    service.post('/seek/file/',{
+    axios.post('/api/seek/file/',{
         "record_id":route.params.id
     })
     .then((res)=>{
@@ -422,10 +457,11 @@ const list = [
 
 // 获取所有工单
 const orderForm = reactive({ data: [] }) 
+const typeid = ref('')
 var j = 0
 const getorder = async() =>{
         try {
-            let res = await service.get('/record/')
+            let res = await axios.get('/api/record/')
             if (res.data.code === 0) {
                 let data = res.data.data
                 let valuableData = []
@@ -438,6 +474,7 @@ const getorder = async() =>{
                 }
                 orderForm.data = valuableData
                 infoForm.data = orderForm.data[0]
+                typeid.value = infoForm.data.tableType_id
             }
         } catch (err) {
             console.log(err)
@@ -451,6 +488,17 @@ const getorder = async() =>{
             <template #header>
                 <div class="card-header">
                     <span>工单详情</span>
+                    <div class="step">
+                        <el-steps :active="0" align-center finish-status="success">
+                            <el-step description="建设单位" />
+                            <el-step description="设计单位" />
+                            <el-step description="施工单位" />
+                            <el-step description="监理单位" />
+                        </el-steps>
+                    </div>
+                    <div class="btn">
+                    <el-button type="primary" class="button" @click="FormVisible11 = true">审批</el-button>
+                    </div>
                     <div class="btn">
                     <el-button type="primary" class="button" @click="FormVisible = true">+上传附件</el-button>
                     </div>
@@ -459,8 +507,8 @@ const getorder = async() =>{
             <el-descriptions :column="2">
                 <el-descriptions-item>工单名称：{{infoForm.data.name}}</el-descriptions-item>
                 <el-descriptions-item>工单状态：{{infoForm.data.state}}</el-descriptions-item>
-                <el-descriptions-item v-if="infoForm.data.ownerOp==''">建筑单位意见：<span style="color: #F56C6C;">待审核..</span></el-descriptions-item>
-                <el-descriptions-item v-else>建筑单位意见：{{infoForm.data.ownerOp}}</el-descriptions-item>
+                <el-descriptions-item v-if="infoForm.data.ownerOp==''">建设单位意见：<span style="color: #F56C6C;">待审核..</span></el-descriptions-item>
+                <el-descriptions-item v-else>建设单位意见：{{infoForm.data.ownerOp}}</el-descriptions-item>
                 <el-descriptions-item v-if="infoForm.data.designOp==''">设计单位意见：<span style="color: #F56C6C;">待审核..</span></el-descriptions-item>
                 <el-descriptions-item v-else>设计单位意见：{{infoForm.data.designOp}}</el-descriptions-item>
                 <el-descriptions-item v-if="infoForm.data.superviseOp==''">监理单位意见：<span style="color: #F56C6C;">待审核..</span></el-descriptions-item>
@@ -468,35 +516,35 @@ const getorder = async() =>{
                 <el-descriptions-item v-if="infoForm.data.constructOp==''">施工单位意见：<span style="color: #F56C6C;">待审核..</span></el-descriptions-item>
                 <el-descriptions-item v-else>施工单位意见：{{infoForm.data.constructOp}}</el-descriptions-item>
 
-                <el-descriptions-item v-if="infoForm.data.EngineMeasure==''">签证计量单：<el-button type="danger" plain size="small" @click="addEngineMeasure(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-else>签证计量单：<el-button type="primary" plain size="small" @click="FormVisibleEM=true" >查看</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='1' && infoForm.data.EngineMeasure==''">签证计量单：<el-button type="danger" plain size="small" @click="addEngineMeasure(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='1' && infoForm.data.EngineMeasure!=''">签证计量单：<el-button type="primary" plain size="small" @click="FormVisibleEM=true" >查看</el-button></el-descriptions-item>
 
-                <el-descriptions-item v-if="infoForm.data.WorkContact==''">工作联系单：<el-button type="danger" plain size="small" @click="addWorkContact(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-else>工作联系单：<el-button type="primary" plain size="small" @click="FormVisibleWC=true" >查看</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='2' && infoForm.data.WorkContact==''">工作联系单：<el-button type="danger" plain size="small" @click="addWorkContact(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='2' && infoForm.data.WorkContact!=''">工作联系单：<el-button type="primary" plain size="small" @click="FormVisibleWC=true" >查看</el-button></el-descriptions-item>
 
-                <el-descriptions-item v-if="infoForm.data.SWorkContact==''">监理工作联系单：<el-button type="danger" plain size="small" @click="addSWorkContact(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-else>监理工作联系单：<el-button type="primary" plain size="small" @click="FormVisibleSWC=true" >查看</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='3' && infoForm.data.SWorkContact==''">监理工作联系单：<el-button type="danger" plain size="small" @click="addSWorkContact(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='3' && infoForm.data.SWorkContact!=''">监理工作联系单：<el-button type="primary" plain size="small" @click="FormVisibleSWC=true" >查看</el-button></el-descriptions-item>
 
-                <el-descriptions-item v-if="infoForm.data.ChangContact==''">合同变更申请单：<el-button type="danger" plain size="small" @click="addChangContact(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-else>合同变更申请单：<el-button type="primary" plain size="small" @click="FormVisibleCC=true" >查看</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='4' && infoForm.data.ChangContact==''">合同变更申请单：<el-button type="danger" plain size="small" @click="addChangContact(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='4' && infoForm.data.ChangContact!=''">合同变更申请单：<el-button type="primary" plain size="small" @click="FormVisibleCC=true" >查看</el-button></el-descriptions-item>
 
-                <el-descriptions-item v-if="infoForm.data.SuperMeeting==''">监理会议纪要：<el-button type="danger" plain size="small" @click="addSuperMeeting(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-else>监理会议纪要：<el-button type="primary" plain size="small" @click="FormVisibleSM=true" >查看</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='5' && infoForm.data.SuperMeeting==''">监理会议纪要：<el-button type="danger" plain size="small" @click="addSuperMeeting(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='5' && infoForm.data.SuperMeeting!=''">监理会议纪要：<el-button type="primary" plain size="small" @click="FormVisibleSM=true" >查看</el-button></el-descriptions-item>
 
-                <el-descriptions-item v-if="infoForm.data.ConstructLog==''">施工日志：<el-button type="danger" plain size="small" @click="addConstructLog(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-else>施工日志：<el-button type="primary" plain size="small" @click="FormVisibleCL=true" >查看</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='9' && infoForm.data.ConstructLog==''">施工日志：<el-button type="danger" plain size="small" @click="addConstructLog(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='9' && infoForm.data.ConstructLog!=''">施工日志：<el-button type="primary" plain size="small" @click="FormVisibleCL=true" >查看</el-button></el-descriptions-item>
 
-                <el-descriptions-item v-if="infoForm.data.SuperLog==''">监理日志：<el-button type="danger" plain size="small" @click="addSuperLog(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-else>监理日志：<el-button type="primary" plain size="small" @click="FormVisibleSL=true" >查看</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='6' && infoForm.data.SuperLog==''">监理日志：<el-button type="danger" plain size="small" @click="addSuperLog(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='6' && infoForm.data.SuperLog!=''">监理日志：<el-button type="primary" plain size="small" @click="FormVisibleSL=true" >查看</el-button></el-descriptions-item>
 
-                <el-descriptions-item v-if="infoForm.data.DealLog==''">洽商记录：<el-button type="danger" plain size="small" @click="addDealLog(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-else>洽商记录：<el-button type="primary" plain size="small" @click="FormVisibleDL=true" >查看</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='7' && infoForm.data.DealLog==''">洽商记录：<el-button type="danger" plain size="small" @click="addDealLog(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='7' && infoForm.data.DealLog!=''">洽商记录：<el-button type="primary" plain size="small" @click="FormVisibleDL=true" >查看</el-button></el-descriptions-item>
 
-                <el-descriptions-item v-if="infoForm.data.DrawingReview==''">图纸会审记录：<el-button type="danger" plain size="small" @click="addDrawingReview(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-else>图纸会审记录：<el-button type="primary" plain size="small" @click="FormVisibleDR=true" >查看</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='10' && infoForm.data.DrawingReview==''">图纸会审记录：<el-button type="danger" plain size="small" @click="addDrawingReview(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='10' && infoForm.data.DrawingReview!=''">图纸会审记录：<el-button type="primary" plain size="small" @click="FormVisibleDR=true" >查看</el-button></el-descriptions-item>
 
-                <el-descriptions-item v-if="infoForm.data.DesignChange==''">设计变更：<el-button type="danger" plain size="small" @click="addDesignChange(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-else>设计变更：<el-button type="primary" plain size="small" @click="FormVisibleDC=true" >查看</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='8' && infoForm.data.DesignChange==''">设计变更：<el-button type="danger" plain size="small" @click="addDesignChange(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='8' && infoForm.data.DesignChange!=''">设计变更：<el-button type="primary" plain size="small" @click="FormVisibleDC=true" >查看</el-button></el-descriptions-item>
             </el-descriptions>
         </el-card>
 
@@ -604,6 +652,35 @@ const getorder = async() =>{
                     <el-descriptions-item label="图号:">{{infoForm.data.DesignChange[0].picNumber}}</el-descriptions-item>
                     <el-descriptions-item label="洽商内容:">{{infoForm.data.DesignChange[0].content}}</el-descriptions-item>
             </el-descriptions>
+        </el-dialog>
+
+
+        <!-- 审批 -->
+        <el-dialog v-model="FormVisible11" title="工单审批" @close="closeDialog1">
+            <el-form :model="opiniondata">
+                <el-form-item label="意见：" prop="info">
+                    <el-input v-model="opiniondata.info" />
+                </el-form-item>
+                <el-form-item label="附件：" prop="picture">
+                    <el-upload
+                    ref="upload1"
+                    :limit="1"
+                    :on-change="handleChange1"
+                    :auto-upload="false">
+                        <template #trigger>
+                            <el-button type="primary">选择文件</el-button>
+                        </template>
+                    </el-upload>
+                </el-form-item>
+            </el-form>
+            <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="FormVisible11 = false">取消</el-button>
+                <el-button type="primary" @click="uploadopinion()">
+                确认
+                </el-button>
+            </span>
+            </template>
         </el-dialog>
 
 
@@ -979,8 +1056,12 @@ const getorder = async() =>{
     font-size: 15px;
 }
 
-
+.step{
+    width:60%;
+    font-size: smaller;
+}
 .el-table{
     margin: auto;
 }
+
 </style>

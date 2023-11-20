@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
-import service from "../utils/request";
+import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 import userecordInfo from '../pinia/record'
 import { ElMessage } from 'element-plus'
@@ -21,7 +21,8 @@ const FormVisible1 = ref(false)
 
 const formdata = reactive({
     subPro_id:'',
-    notes:''
+    notes:'',
+    tableType_id:''
 })
 
 
@@ -29,10 +30,11 @@ const formdata = reactive({
 
 const createConfirm = ()=>{
     formdata.subPro_id = route.params.id
-    service.post('/record/',formdata)
+    console.log(formdata)
+    axios.post('/api/record/',formdata)
       .then((res)=>{
         if(res.data.code===0){
-            ElMessage.success('工单创建成功')
+            ElMessage.success('工单创建成功,请前往工单详情页添加具体信息')
             getorder()
             FormVisible1.value = false
         }
@@ -57,7 +59,7 @@ const getinfo = async () => {
     // pinia刷新时不会保留数据，需要重新获取
     if (recordInfo.data.length === 0) {
         try {
-            let res = await service.get('/sub/project/')
+            let res = await axios.get('/api/sub/project/')
             if (res.data.code === 0) {
                 recordInfo.data = res.data.data
             }
@@ -71,13 +73,13 @@ const getinfo = async () => {
 const orderForm = reactive({ data: [] }) 
 var j = 0
 const getorder = () =>{
-    service.get('/record/')
+    axios.get('/api/record/')
     .then((res)=>{
         if(res.data.code==0){
             let data = res.data.data
             j=0
             for(let i in data){
-                if(data[i].project_id==route.params.id){
+                if(data[i].subProject_id==route.params.id){
                     orderForm.data[j]=data[i]
                     orderInfo.data[j]=data[i]
                     j++
@@ -87,10 +89,52 @@ const getorder = () =>{
     })
 }
 
+// 获取所有类型
+const tableType = reactive({data:[]})
+const getType = () =>{
+    axios.get('/api/table/type/')
+    .then((res)=>{
+        if(res.data.code==0){
+            let data =  res.data.data
+            let typelist = []
+            let name = ref('')
+            data.forEach((val, index) => {
+                if(val.name=='EngineMeasure'){
+                    name = '签证计量单'
+                }else if(val.name=='WorkContact'){
+                    name = '工作联系单'
+                }else if(val.name=='ChangContact'){
+                    name =  '合同变更申请单'
+                }else if(val.name=='SWorkContact'){
+                    name =  '监理工作联系单'
+                }else if(val.name=='SuperMeeting'){
+                    name =  '监理会议纪要'
+                }else if(val.name=='SuperLog'){
+                    name = '监理日记'
+                }else if(val.name=='DealLog'){
+                    name =  '洽商记录'
+                }else if(val.name=='DesignChange'){
+                    name =  '设计变更'
+                }else if(val.name=='ConstructLog'){
+                    name =  '施工日志'
+                }else if(val.name=='DrawingReview'){
+                    name =  '图纸会审'
+                }
+                typelist.push({
+                    tableType_id: val.tableType_id,
+                    name: name
+                })
+            })
+            tableType.data = typelist
+        }
+    })
+}
+
 // 生命周期中监听
 onMounted(async () => {
     // 加载项目信息
     await getinfo()
+    getType()
     infoForm.data = recordInfo.data[route.params.index]
     getorder()
 })
@@ -135,7 +179,7 @@ const getDetail= (index,id) =>{
             <el-empty v-if="orderForm.data==''" :image-size="100" />
             <el-table v-else :data="orderForm.data" style="width: 80%">
                 <el-table-column label="工单名称" :show-overflow-tooltip="true" prop="name" :width="200" />
-                <el-table-column label="工单状态" prop="state" :width="100">
+                <el-table-column label="工单状态" prop="state" :width="120">
                     <template #default="scope">
                         <el-tag
                         :type="scope.row.tag === 'start' ? '' : 'success'"
@@ -201,10 +245,19 @@ const getDetail= (index,id) =>{
          <!-- 创建工单 -->
          <el-dialog v-model="FormVisible1" title="创建工单" @close="closeDialog1">
             <el-form :model="formdata">
+                <el-form-item label="类型" prop="tableType">
+                    <el-select v-model="formdata.tableType_id" placeholder="请选择类型">
+                        <el-option
+                        v-for="item in tableType.data"
+                        :label="item.name"
+                        :value="item.tableType_id"/>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="项目备注" prop="notes">
                     <el-input 
                     v-model="formdata.notes"
                     :autosize="{ minRows: 2, maxRows: 4 }"
+                    placeholder="非必填"
                     type="textarea" />
                 </el-form-item>
             </el-form>

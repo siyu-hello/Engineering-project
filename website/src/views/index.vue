@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref,reactive } from 'vue'
-import service from "../utils/request";
+import axios from 'axios'
 import * as echarts from 'echarts';
 
 const usercompany = ref(sessionStorage.getItem("usercompany"))
@@ -96,7 +96,7 @@ const config2 = reactive({
 
 
 const getorder = () =>{
-    service.get('/record/')
+    axios.get('/api/record/')
     .then((res)=>{
         if(res.data.code==0){
             let data = res.data.data
@@ -111,7 +111,7 @@ const getorder = () =>{
 
 const getRecord = async() =>{
     try{
-        let res = await service.get('/sub/project/')
+        let res = await axios.get('/api/sub/project/')
         if(res.data.code===0){
             let data = res.data.data
             for(let i in data){

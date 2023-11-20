@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
-import service from "../utils/request";
+import axios from 'axios'
 import { useRoute } from 'vue-router'
 import useProjectInfo from '../pinia/project'
 import { ElMessage } from 'element-plus'
@@ -44,7 +44,7 @@ const recorddata = reactive({
 })
 const addrecord= () =>{
     recorddata.project_id = route.params.id
-    service.post('/sub/project/',recorddata)
+    axios.post('/api/sub/project/',recorddata)
       .then((res)=>{
         if(res.data.code===0){
             ElMessage.success('创建成功！')
@@ -66,7 +66,7 @@ const addUnit= (text,type,id) =>{
     title.value = text
     formdata.subPro_id = id
     //获取相关单位
-    service.get('/company/info/')
+    axios.get('/api/company/info/')
     .then((res)=>{
         if(res.data.code==0){
             let data = res.data.data
@@ -90,7 +90,7 @@ const addconfirm = () =>{
     }
     //上传各单位
     if(title.value=='添加设计单位'){
-        service.post('/add/design/',Data)
+        axios.post('/api/add/design/',Data)
         .then(async (res)=>{
             if(res.data.code==0){
                 ElMessage.success('添加成功！')
@@ -106,7 +106,7 @@ const addconfirm = () =>{
         })
     }
     else if(title.value=='添加监理单位'){
-        service.post('/add/super/',Data)
+        axios.post('/api/add/super/',Data)
         .then(async (res)=>{
             if(res.data.code==0){
                 ElMessage.success('添加成功！')
@@ -122,7 +122,7 @@ const addconfirm = () =>{
         })
     }
     else if(title.value=='添加施工单位'){
-        service.post('/add/construct/',Data)
+        axios.post('/api/add/construct/',Data)
         .then(async (res)=>{
             if(res.data.code==0){
                 ElMessage.success('添加成功！')
@@ -163,7 +163,7 @@ const closeDialog1 = () =>{
 //查询子项目
 const getRecord = async () => {
     try {
-        let res = await service.get('/sub/project/')
+        let res = await axios.get('/api/sub/project/')
         if (res.data.code === 0) {
             let data = res.data.data
             j = 0;
@@ -192,7 +192,7 @@ const getDetail= (index) =>{
 // 下载文件
 const downloadFile=(url)=> {
     var str = url
-    service.get(`/media/${url}`, {
+    axios.get(`/api/media/${url}`, {
         responseType: 'blob', // 设置响应类型为 Blob，以便处理文件
     }).then(
         res => {
@@ -216,7 +216,7 @@ const getinfo = async () => {
     // pinia刷新时不会保留数据，需要重新获取
     if (projectInfo.data.length === 0) {
         try {
-            let res = await service.get('/project/')
+            let res = await axios.get('/api/project/')
             if (res.data.code === 0) {
                 projectInfo.data = res.data.data
             }
@@ -229,7 +229,7 @@ const getinfo = async () => {
 const typeform = reactive({data:[]})
 const getType = async() =>{
     try{
-        let res = await service.get('/project/type/')
+        let res = await axios.get('/api/project/type/')
         if(res.data.code===0){
             typeform.data=res.data.data
         }
@@ -266,7 +266,7 @@ onMounted(async () => {
                 <el-descriptions-item label="预估工作量:">{{ infoForm.data.workload }}</el-descriptions-item>
                 <el-descriptions-item label="建设单位:">{{ infoForm.data.ownerUnit }}</el-descriptions-item>
                 <el-descriptions-item label="项目地点:">{{ infoForm.data.place }}</el-descriptions-item>
-                <el-descriptions-item label="项目简介:">{{ infoForm.data.constant }}</el-descriptions-item>
+                <el-descriptions-item label="项目简介:">{{ infoForm.data.content }}</el-descriptions-item>
                 <el-descriptions-item label="项目备注:">{{ infoForm.data.notes }}</el-descriptions-item>
             </el-descriptions>
         </el-card>

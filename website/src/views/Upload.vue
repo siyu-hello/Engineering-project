@@ -1,7 +1,7 @@
 <script setup>
 import { reactive,ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import service from "../utils/request";
+import axios from 'axios'
 const FormRef = ref(null)
 const form = reactive({
     name:'',
@@ -36,7 +36,7 @@ const upload= () =>{
     if (!FormRef.value) return
     FormRef.value.validate((valid) => {
     if (valid) {
-        service.post('/project/',form)
+      axios.post('/api/project/',form)
       .then((res)=>{
         if(res.data.code===0){
             ElMessage.success('项目发布成功！进入项目页面查看')

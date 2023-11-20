@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import service from "../utils/request";
+import axios from 'axios'
 import { HomeFilled,Upload,Setting,Tickets } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import router from '../router/router';
@@ -9,7 +9,7 @@ const dialogVisible = ref(false)
 const type = sessionStorage.getItem('username')
 
 const outLogin = () =>{
-    service.delete('/logout/')
+    axios.delete('/api/logout/')
     .then((res)=>{
         if(res.data.code===0){
             sessionStorage.clear()
