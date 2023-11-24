@@ -104,6 +104,7 @@ const getorder = () =>{
                 config2.data.push([data[i].name,'<span style="color:#F56C6C;">'+data[i].state+'</span>'])
             }
             recordtotal.value = data.length
+            initecharts2()
         }
     })
 }
@@ -118,6 +119,7 @@ const getRecord = async() =>{
                     config1.data.push([data[i].name,data[i].content])
                 }
                 subprototal.value = data.length
+                initecharts1()
             }
         }
     catch(err){
@@ -128,10 +130,6 @@ const getRecord = async() =>{
 onMounted(()=>{
     getRecord()
     getorder()
-    setTimeout(() => {
-        initecharts1()
-        initecharts2()
-    }, 800)
 })
 </script>
 

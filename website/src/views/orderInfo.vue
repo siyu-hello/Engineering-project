@@ -458,6 +458,7 @@ const list = [
 // 获取所有工单
 const orderForm = reactive({ data: [] }) 
 const typeid = ref('')
+const state = ref('')
 var j = 0
 const getorder = async() =>{
         try {
@@ -475,10 +476,64 @@ const getorder = async() =>{
                 orderForm.data = valuableData
                 infoForm.data = orderForm.data[0]
                 typeid.value = infoForm.data.tableType_id
+                state.value = infoForm.data.state
+                getoporder()
             }
         } catch (err) {
             console.log(err)
         }
+}
+
+// 获取当前工单的流转顺序
+const oporder = ref('')
+const step = reactive({data:[]})
+const active = ref(0)
+const nextrole = ref('')
+const getoporder= () =>{
+    axios.get('/api/table/type/')
+    .then((res)=>{
+        if(res.data.code==0){
+            let data = res.data.data
+            for(let i in data){
+                if(data[i].tableType_id==typeid.value){
+                    oporder.value = data[i].order
+                }
+            }
+            //将数字转换为对应的含义
+            step.data = []
+            for(let i=0;i<oporder.value.length;i+=2){
+                if(oporder.value[i]=='0'){
+                    step.data.push({name:'开始',state:'start'})
+                }else if(oporder.value[i]=='1'){
+                    step.data.push({name:'建设单位',state:'ownerUnit'})
+                }else if(oporder.value[i]=='2'){
+                    step.data.push({name:'设计单位',state:'designUnit'})
+                }else if(oporder.value[i]=='3'){
+                    step.data.push({name:'监理单位',state:'superviseUnit'})
+                }else if(oporder.value[i]=='4'){
+                    step.data.push({name:'施工单位',state:'constructUnit'})
+                }
+            }
+            //计算当前到哪一步
+            for(let i in step.data){
+                if(state.value==step.data[i].state){
+                    active.value=++i
+                    nextrole.value=step.data[i].state
+                    console.log(nextrole.value)
+                }
+            }
+        }
+    })
+}
+
+// 判断是否有审批权限
+const exam=()=>{
+    let role = sessionStorage.getItem("is_type")
+    if(role==nextrole.value || oporder.value=='0'){
+        FormVisible11.value = true
+    }else{
+        ElMessage.error('暂无审批权限')
+    }
 }
 </script>
 
@@ -489,15 +544,12 @@ const getorder = async() =>{
                 <div class="card-header">
                     <span>工单详情</span>
                     <div class="step">
-                        <el-steps :active="0" align-center finish-status="success">
-                            <el-step description="建设单位" />
-                            <el-step description="设计单位" />
-                            <el-step description="施工单位" />
-                            <el-step description="监理单位" />
+                        <el-steps v-if="oporder!='0'" :active="active" align-center finish-status="success">
+                            <el-step v-for="item in step.data" :description="item.name" />
                         </el-steps>
                     </div>
                     <div class="btn">
-                    <el-button type="primary" class="button" @click="FormVisible11 = true">审批</el-button>
+                    <el-button type="primary" class="button" @click="exam()">审批</el-button>
                     </div>
                     <div class="btn">
                     <el-button type="primary" class="button" @click="FormVisible = true">+上传附件</el-button>
