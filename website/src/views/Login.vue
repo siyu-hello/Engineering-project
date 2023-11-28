@@ -71,7 +71,7 @@ const login=()=>{
         <el-card 
         class="card"
         :body-style="{ padding: '0px' }">
-            <h2>建筑审批平台</h2>
+            <h2>财政投资全过程实时管控平台</h2>
             <el-form 
             ref="FormRef"
             :model="ruleForm"
@@ -112,7 +112,7 @@ const login=()=>{
     background-color: rgb(244, 245, 245);
 }
 .card{
-    width: 300px;
+    width: 350px;
     line-height: 60px;
 }
 .el-button{

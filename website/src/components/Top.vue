@@ -14,7 +14,7 @@ const gohome = () =>{
     <div class="container">
         <el-icon class="reload" color=" #ffd04b" size="23" @click="reload()"><RefreshRight /></el-icon>
         <el-icon class="home" color=" #ffd04b" size="23" @click="gohome()"><HomeFilled /></el-icon>
-        <h3>建筑审核平台</h3>
+        <h3>财政投资全过程实时管控平台</h3>
         <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="30"/>
     </div>
 </template>

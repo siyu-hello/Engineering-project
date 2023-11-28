@@ -115,12 +115,12 @@ const getDetail= (index,id) =>{
         <el-card >
             <template #header>
                 <div class="card-header">
-                    <span>项目列表</span>
+                    <span>子项目列表</span>
                 </div>
             </template>
             <el-table 
             :data="recordform.data" 
-            style="width: 90%"
+            style="width: 95%"
             :header-cell-style="{ textAlign: 'center' }"
             :cell-style="{ textAlign: 'center' }">
                 <el-table-column 
@@ -129,9 +129,9 @@ const getDetail= (index,id) =>{
                 :label="item.label" 
                 :width="item.width"
                 :show-overflow-tooltip="true" />
-                <el-table-column label="操作">
+                <el-table-column fixed="right" label="操作">
                     <template #default="scope">
-                        <el-button type="primary" size="small" @click="getDetail(scope.$index, scope.row.subPro_id)">查看详情</el-button>
+                        <el-button type="primary" size="small" @click="getDetail(scope.$index, scope.row.subPro_id)">工单管理</el-button>
                     </template>
                 </el-table-column>
             </el-table>

@@ -41,13 +41,13 @@ const outLogin = () =>{
           <el-icon><Tickets /></el-icon>
           <span>项目列表</span>
         </el-menu-item>
-        <el-menu-item v-if="type=='owner'" index="/upload">
+        <!-- <el-menu-item v-if="type=='owner'" index="/upload">
           <el-icon><Upload /></el-icon>
           <span>发布项目</span>
-        </el-menu-item>
+        </el-menu-item> -->
         <el-menu-item index="/record">
           <el-icon><Tickets /></el-icon>
-          <span>我的项目</span>
+          <span>工单管理</span>
         </el-menu-item>
         <el-menu-item index="/setting">
           <el-icon><Setting /></el-icon>
