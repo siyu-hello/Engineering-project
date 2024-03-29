@@ -220,4 +220,8 @@ const getDetail= (index,id) =>{
 .el-table{
     margin: auto;
 }
+
+.container >>> .el-table__header{
+    margin: 0 auto;
+}
 </style>

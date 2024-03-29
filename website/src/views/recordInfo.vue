@@ -232,7 +232,7 @@ const getDetail= (index,id) =>{
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作">
+                <el-table-column fixed="right" label="操作" width="150">
                     <template #default="scope">
                         <el-button type="primary" size="small" @click="getDetail(scope.$index,scope.row.record_id)">展开更多</el-button>
                     </template>
@@ -302,6 +302,10 @@ const getDetail= (index,id) =>{
 
 .el-table{
     margin: auto;
+}
+
+.container >>> .el-table__header{
+    margin: 0 auto;
 }
 </style>
 
