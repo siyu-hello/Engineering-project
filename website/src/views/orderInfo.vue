@@ -576,10 +576,11 @@ const exam=()=>{
                 <el-descriptions-item v-if="typeid=='2' && infoForm.data.WorkContact==''">工作联系单：<el-button type="danger" plain size="small" @click="addWorkContact(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
                 <el-descriptions-item width="80%" v-if="typeid=='2' && infoForm.data.WorkContact!=''">工作联系单：
                 <el-card shadow="never" class="qz">
-
-                    <el-descriptions :column="1">
-                                    <el-descriptions-item label="联系事项:">{{infoForm.data.WorkContact[0].content }}</el-descriptions-item>
-                            </el-descriptions>
+                    <div class="liannxi" style="overflow: auto; width: 780px">联系事项：{{infoForm.data.WorkContact[0].content }}</div>
+                    <!-- <el-descriptions :column="1">
+                        
+                                    <el-descriptions-item style="overflow: auto;" label="联系事项:"></el-descriptions-item>
+                            </el-descriptions> -->
                 </el-card>
                 </el-descriptions-item>
 
