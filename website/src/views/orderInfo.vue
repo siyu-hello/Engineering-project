@@ -8,6 +8,10 @@ import { useRoute } from 'vue-router'
 
 const user = ref(sessionStorage.getItem('username'))
 const route = useRoute()
+const projectnname=ref(route.params.projectnname)
+console.log(projectnname.value)
+const projectid=ref(route.params.id)
+console.log(projectid.value)
 const orderInfo = useorderInfo()
 const infoForm = reactive({ data: {} })
 const FormVisible = ref(false)
@@ -535,6 +539,7 @@ const exam=()=>{
         ElMessage.error('暂无审批权限')
     }
 }
+
 </script>
 
 <template>
@@ -559,75 +564,48 @@ const exam=()=>{
             <el-descriptions :column="2">
                 <el-descriptions-item>工单名称：{{infoForm.data.name}}</el-descriptions-item>
                 <el-descriptions-item>工单状态：{{infoForm.data.state}}</el-descriptions-item>
-                <el-descriptions-item v-if="infoForm.data.ownerOp==''">建设单位意见：<span style="color: #F56C6C;">待审核..</span></el-descriptions-item>
-                <el-descriptions-item v-else>建设单位意见：{{infoForm.data.ownerOp}}</el-descriptions-item>
-                <el-descriptions-item v-if="infoForm.data.designOp==''">设计单位意见：<span style="color: #F56C6C;">待审核..</span></el-descriptions-item>
-                <el-descriptions-item v-else>设计单位意见：{{infoForm.data.designOp}}</el-descriptions-item>
-                <el-descriptions-item v-if="infoForm.data.superviseOp==''">监理单位意见：<span style="color: #F56C6C;">待审核..</span></el-descriptions-item>
-                <el-descriptions-item v-else>监理单位意见：{{infoForm.data.superviseOp}}</el-descriptions-item>
-                <el-descriptions-item v-if="infoForm.data.constructOp==''">施工单位意见：<span style="color: #F56C6C;">待审核..</span></el-descriptions-item>
-                <el-descriptions-item v-else>施工单位意见：{{infoForm.data.constructOp}}</el-descriptions-item>
-
+                <!-- 十个文件 -->
                 <el-descriptions-item v-if="typeid=='1' && infoForm.data.EngineMeasure==''">签证计量单：<el-button type="danger" plain size="small" @click="addEngineMeasure(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-if="typeid=='1' && infoForm.data.EngineMeasure!=''">签证计量单：<el-button type="primary" plain size="small" @click="FormVisibleEM=true" >查看</el-button></el-descriptions-item>
+                <el-descriptions-item width="80%" v-if="typeid=='1' && infoForm.data.EngineMeasure!=''">签证计量单：
+                   <el-card shadow="never" class="qz"><el-descriptions :column="1">
+                    <el-descriptions-item label="签证内容:">{{infoForm.data.EngineMeasure[0].content}}</el-descriptions-item>
+            </el-descriptions></el-card> 
+                
+                </el-descriptions-item>
 
                 <el-descriptions-item v-if="typeid=='2' && infoForm.data.WorkContact==''">工作联系单：<el-button type="danger" plain size="small" @click="addWorkContact(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-if="typeid=='2' && infoForm.data.WorkContact!=''">工作联系单：<el-button type="primary" plain size="small" @click="FormVisibleWC=true" >查看</el-button></el-descriptions-item>
+                <el-descriptions-item width="80%" v-if="typeid=='2' && infoForm.data.WorkContact!=''">工作联系单：
+                <el-card shadow="never" class="qz">
+
+                    <el-descriptions :column="1">
+                                    <el-descriptions-item label="联系事项:">{{infoForm.data.WorkContact[0].content }}</el-descriptions-item>
+                            </el-descriptions>
+                </el-card>
+                </el-descriptions-item>
 
                 <el-descriptions-item v-if="typeid=='3' && infoForm.data.SWorkContact==''">监理工作联系单：<el-button type="danger" plain size="small" @click="addSWorkContact(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-if="typeid=='3' && infoForm.data.SWorkContact!=''">监理工作联系单：<el-button type="primary" plain size="small" @click="FormVisibleSWC=true" >查看</el-button></el-descriptions-item>
-
-                <el-descriptions-item v-if="typeid=='4' && infoForm.data.ChangContact==''">合同变更申请单：<el-button type="danger" plain size="small" @click="addChangContact(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-if="typeid=='4' && infoForm.data.ChangContact!=''">合同变更申请单：<el-button type="primary" plain size="small" @click="FormVisibleCC=true" >查看</el-button></el-descriptions-item>
-
-                <el-descriptions-item v-if="typeid=='5' && infoForm.data.SuperMeeting==''">监理会议纪要：<el-button type="danger" plain size="small" @click="addSuperMeeting(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-if="typeid=='5' && infoForm.data.SuperMeeting!=''">监理会议纪要：<el-button type="primary" plain size="small" @click="FormVisibleSM=true" >查看</el-button></el-descriptions-item>
-
-                <el-descriptions-item v-if="typeid=='9' && infoForm.data.ConstructLog==''">施工日志：<el-button type="danger" plain size="small" @click="addConstructLog(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-if="typeid=='9' && infoForm.data.ConstructLog!=''">施工日志：<el-button type="primary" plain size="small" @click="FormVisibleCL=true" >查看</el-button></el-descriptions-item>
-
-                <el-descriptions-item v-if="typeid=='6' && infoForm.data.SuperLog==''">监理日志：<el-button type="danger" plain size="small" @click="addSuperLog(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-if="typeid=='6' && infoForm.data.SuperLog!=''">监理日志：<el-button type="primary" plain size="small" @click="FormVisibleSL=true" >查看</el-button></el-descriptions-item>
-
-                <el-descriptions-item v-if="typeid=='7' && infoForm.data.DealLog==''">洽商记录：<el-button type="danger" plain size="small" @click="addDealLog(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-if="typeid=='7' && infoForm.data.DealLog!=''">洽商记录：<el-button type="primary" plain size="small" @click="FormVisibleDL=true" >查看</el-button></el-descriptions-item>
-
-                <el-descriptions-item v-if="typeid=='10' && infoForm.data.DrawingReview==''">图纸会审记录：<el-button type="danger" plain size="small" @click="addDrawingReview(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-if="typeid=='10' && infoForm.data.DrawingReview!=''">图纸会审记录：<el-button type="primary" plain size="small" @click="FormVisibleDR=true" >查看</el-button></el-descriptions-item>
-
-                <el-descriptions-item v-if="typeid=='8' && infoForm.data.DesignChange==''">设计变更：<el-button type="danger" plain size="small" @click="addDesignChange(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-if="typeid=='8' && infoForm.data.DesignChange!=''">设计变更：<el-button type="primary" plain size="small" @click="FormVisibleDC=true" >查看</el-button></el-descriptions-item>
-            </el-descriptions>
-        </el-card>
-
-        <!-- 签证计量单 -->
-        <el-dialog v-model="FormVisibleEM" title="签证计量单">
-            <el-descriptions :column="1">
-                    <el-descriptions-item label="签证内容:">{{infoForm.data.EngineMeasure[0].content}}</el-descriptions-item>
-            </el-descriptions>
-        </el-dialog>
-        <!-- 工作联系单 -->
-        <el-dialog v-model="FormVisibleWC" title="工作联系单">
-            <el-descriptions :column="1">
-                    <el-descriptions-item label="联系事项:">{{infoForm.data.WorkContact[0].content}}</el-descriptions-item>
-            </el-descriptions>
-        </el-dialog>
-        <!-- 监理工作联系单 -->
-        <el-dialog v-model="FormVisibleSWC" title="监理工作联系单">
-            <el-descriptions :column="1">
+                <el-descriptions-item width="80%" v-if="typeid=='3' && infoForm.data.SWorkContact!=''">监理工作联系单：
+                <el-card shadow="never" class="qz"> 
+                    <el-descriptions :column="1">
                     <el-descriptions-item label="联系事项:">{{infoForm.data.SWorkContact[0].content}}</el-descriptions-item>
                     <el-descriptions-item label="事由:">{{infoForm.data.SWorkContact[0].why}}</el-descriptions-item>
             </el-descriptions>
-        </el-dialog>
-        <!-- 合同变更申请单 -->
-        <el-dialog v-model="FormVisibleCC" title="合同变更申请单">
-            <el-descriptions :column="1">
+                </el-card>    
+                
+                </el-descriptions-item>
+
+                <el-descriptions-item v-if="typeid=='4' && infoForm.data.ChangContact==''">合同变更申请单：<el-button type="danger" plain size="small" @click="addChangContact(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
+                <el-descriptions-item width="80%" v-if="typeid=='4' && infoForm.data.ChangContact!=''">合同变更申请单：<el-card shadow="never" class="qz">
+                    <el-descriptions :column="1">
                     <el-descriptions-item label="原因:">{{infoForm.data.ChangContact[0].why}}</el-descriptions-item>
             </el-descriptions>
-        </el-dialog>
-        <!-- 监理会议纪要 -->
-        <el-dialog v-model="FormVisibleSM" title="监理会议纪要">
-            <el-descriptions :column="1">
+                </el-card>
+                </el-descriptions-item>
+
+                <el-descriptions-item v-if="typeid=='5' && infoForm.data.SuperMeeting==''">监理会议纪要：<el-button type="danger" plain size="small" @click="addSuperMeeting(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
+                <el-descriptions-item width="80%" v-if="typeid=='5' && infoForm.data.SuperMeeting!=''">监理会议纪要：
+                    <el-card shadow="never" class="qz">
+                        <el-descriptions :column="1">
                     <el-descriptions-item label="会议地点:">{{infoForm.data.SuperMeeting[0].place}}</el-descriptions-item>
                     <el-descriptions-item label="主要议题:">{{infoForm.data.SuperMeeting[0].content}}</el-descriptions-item>
                     <el-descriptions-item label="解决或议定事项:">{{infoForm.data.SuperMeeting[0].agreedMatters}}</el-descriptions-item>
@@ -636,11 +614,15 @@ const exam=()=>{
                     <el-descriptions-item label="设计单位人员:">{{infoForm.data.SuperMeeting[0].designName}}</el-descriptions-item>
                     <el-descriptions-item label="监理单位人员:">{{infoForm.data.SuperMeeting[0].superName}}</el-descriptions-item>
                     <el-descriptions-item label="施工单位人员:">{{infoForm.data.SuperMeeting[0].constructName}}</el-descriptions-item>
-            </el-descriptions>
-        </el-dialog>
-        <!-- 施工日志 -->
-        <el-dialog v-model="FormVisibleCL" title="施工日志">
-            <el-descriptions :column="1">
+            </el-descriptions>    
+                    </el-card>
+
+                </el-descriptions-item>
+
+                <el-descriptions-item v-if="typeid=='9' && infoForm.data.ConstructLog==''">施工日志：<el-button type="danger" plain size="small" @click="addConstructLog(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
+                <el-descriptions-item v-if="typeid=='9' && infoForm.data.ConstructLog!=''">施工日志：
+<el-card shadow="never" class="qz">
+    <el-descriptions :column="1">
                     <el-descriptions-item label="天气:">{{infoForm.data.ConstructLog[0].weather}}</el-descriptions-item>
                     <el-descriptions-item label="最低及最高气温:">{{infoForm.data.ConstructLog[0].temperature}}</el-descriptions-item>
                     <el-descriptions-item label="班组:">{{infoForm.data.ConstructLog[0].group}}</el-descriptions-item>
@@ -657,10 +639,13 @@ const exam=()=>{
                     <el-descriptions-item label="安全:">{{infoForm.data.ConstructLog[0].safe}}</el-descriptions-item>
                     <el-descriptions-item label="处理方法:">{{infoForm.data.ConstructLog[0].processMethod}}</el-descriptions-item>
             </el-descriptions>
-        </el-dialog>
-        <!-- 监理日志 -->
-        <el-dialog v-model="FormVisibleSL" title="监理日志">
-            <el-descriptions :column="1">
+</el-card>
+                </el-descriptions-item>
+
+                <el-descriptions-item v-if="typeid=='6' && infoForm.data.SuperLog==''">监理日志：<el-button type="danger" plain size="small" @click="addSuperLog(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
+                <el-descriptions-item width="80%" v-if="typeid=='6' && infoForm.data.SuperLog!=''">监理日志：
+                    <el-card shadow="never" class="qz"> 
+                        <el-descriptions :column="1">
                     <el-descriptions-item label="天气:">{{infoForm.data.SuperLog[0].weather}}</el-descriptions-item>
                     <el-descriptions-item label="最低及最高气温:">{{infoForm.data.SuperLog[0].temperature}}</el-descriptions-item>
                     <el-descriptions-item label="班组:">{{infoForm.data.SuperLog[0].group}}</el-descriptions-item>
@@ -674,20 +659,25 @@ const exam=()=>{
                     <el-descriptions-item label="旁站监理:">{{infoForm.data.SuperLog[0].sitSuper}}</el-descriptions-item>
                     <el-descriptions-item label="监理通知:">{{infoForm.data.SuperLog[0].superNotice}}</el-descriptions-item>
             </el-descriptions>
-        </el-dialog>
-        <!-- 洽商记录 -->
-        <el-dialog v-model="FormVisibleDL" title="洽商记录">
-            <el-descriptions :column="1">
+                </el-card>    
+                
+                </el-descriptions-item>
+
+                <el-descriptions-item v-if="typeid=='7' && infoForm.data.DealLog==''">洽商记录：<el-button type="danger" plain size="small" @click="addDealLog(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
+                <el-descriptions-item width="80%" v-if="typeid=='7' && infoForm.data.DealLog!=''">洽商记录：<el-card shadow="never" class="qz">
+                    <el-descriptions :column="1">
                     <el-descriptions-item label="洽商主题:">{{infoForm.data.DealLog[0].title}}</el-descriptions-item>
                     <el-descriptions-item label="洽商地址:">{{infoForm.data.DealLog[0].address}}</el-descriptions-item>
                     <el-descriptions-item label="洽商主持人:">{{infoForm.data.DealLog[0].host}}</el-descriptions-item>
                     <el-descriptions-item label="洽商内容:">{{infoForm.data.DealLog[0].content}}</el-descriptions-item>
                     <el-descriptions-item label="洽商结果:">{{infoForm.data.DealLog[0].result}}</el-descriptions-item>
             </el-descriptions>
-        </el-dialog>
-        <!-- 图纸会审记录 -->
-        <el-dialog v-model="FormVisibleDR" title="图纸会审记录">
-            <el-descriptions :column="1">
+                </el-card>
+                </el-descriptions-item>
+
+                <el-descriptions-item v-if="typeid=='10' && infoForm.data.DrawingReview==''">图纸会审记录：<el-button type="danger" plain size="small" @click="addDrawingReview(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
+                <el-descriptions-item width="80%" v-if="typeid=='10' && infoForm.data.DrawingReview!=''">图纸会审记录：<el-card shadow="never" class="qz">
+                    <el-descriptions :column="1">
                     <el-descriptions-item label="地点:">{{infoForm.data.DrawingReview[0].place}}</el-descriptions-item>
                     <el-descriptions-item label="专业名称:">{{infoForm.data.DrawingReview[0].proName}}</el-descriptions-item>
                     <el-descriptions-item label="主持人:">{{infoForm.data.DrawingReview[0].host}}</el-descriptions-item>
@@ -696,14 +686,75 @@ const exam=()=>{
                     <el-descriptions-item label="图号:">{{infoForm.data.DrawingReview[0].picNumber}}</el-descriptions-item>
                     <el-descriptions-item label="会审记录:">{{infoForm.data.DrawingReview[0].content}}</el-descriptions-item>
             </el-descriptions>
-        </el-dialog>
-        <!-- 设计变更 -->
-        <el-dialog v-model="FormVisibleDC" title="设计变更">
-            <el-descriptions :column="1">
+                </el-card>
+                </el-descriptions-item>
+
+                <el-descriptions-item v-if="typeid=='8' && infoForm.data.DesignChange==''">设计变更：<el-button type="danger" plain size="small" @click="addDesignChange(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
+                <el-descriptions-item width="80%" v-if="typeid=='8' && infoForm.data.DesignChange!=''">设计变更：
+                    <el-card shadow="never" class="qz">
+                        <el-descriptions :column="1">
                     <el-descriptions-item label="变更原因:">{{infoForm.data.DesignChange[0].why}}</el-descriptions-item>
                     <el-descriptions-item label="图号:">{{infoForm.data.DesignChange[0].picNumber}}</el-descriptions-item>
                     <el-descriptions-item label="洽商内容:">{{infoForm.data.DesignChange[0].content}}</el-descriptions-item>
             </el-descriptions>
+
+                    </el-card>
+                
+                </el-descriptions-item>
+            <el-descriptions-item>  </el-descriptions-item>
+                <!--  -->
+                <el-descriptions-item v-if="infoForm.data.ownerOp==''">建设单位意见：<span style="color: #F56C6C;">待审核..</span></el-descriptions-item>
+                <el-descriptions-item v-else>建设单位意见：{{infoForm.data.ownerOp}}</el-descriptions-item>
+                <el-descriptions-item v-if="infoForm.data.designOp==''">设计单位意见：<span style="color: #F56C6C;">待审核..</span></el-descriptions-item>
+                <el-descriptions-item v-else>设计单位意见：{{infoForm.data.designOp}}</el-descriptions-item>
+                <el-descriptions-item v-if="infoForm.data.superviseOp==''">监理单位意见：<span style="color: #F56C6C;">待审核..</span></el-descriptions-item>
+                <el-descriptions-item v-else>监理单位意见：{{infoForm.data.superviseOp}}</el-descriptions-item>
+                <el-descriptions-item v-if="infoForm.data.constructOp==''">施工单位意见：<span style="color: #F56C6C;">待审核..</span></el-descriptions-item>
+                <el-descriptions-item v-else>施工单位意见：{{infoForm.data.constructOp}}</el-descriptions-item>
+
+               
+            </el-descriptions>
+        </el-card>
+
+        <!-- 签证计量单 -->
+        <div v-if="FormVisibleEM" title="签证计量单">
+           
+        </div>
+        <!-- 工作联系单 -->
+        <el-dialog v-model="FormVisibleWC" title="工作联系单">
+           
+        </el-dialog>
+        <!-- 监理工作联系单 -->
+        <el-dialog v-model="FormVisibleSWC" title="监理工作联系单">
+           
+        </el-dialog>
+        <!-- 合同变更申请单 -->
+        <el-dialog v-model="FormVisibleCC" title="合同变更申请单">
+           
+        </el-dialog>
+        <!-- 监理会议纪要 -->
+        <el-dialog v-model="FormVisibleSM" title="监理会议纪要">
+            
+        </el-dialog>
+        <!-- 施工日志 -->
+        <el-dialog v-model="FormVisibleCL" title="施工日志">
+          
+        </el-dialog>
+        <!-- 监理日志 -->
+        <el-dialog v-model="FormVisibleSL" title="监理日志">
+            
+        </el-dialog>
+        <!-- 洽商记录 -->
+        <el-dialog v-model="FormVisibleDL" title="洽商记录">
+           
+        </el-dialog>
+        <!-- 图纸会审记录 -->
+        <el-dialog v-model="FormVisibleDR" title="图纸会审记录">
+           
+        </el-dialog>
+        <!-- 设计变更 -->
+        <el-dialog v-model="FormVisibleDC" title="设计变更">
+           
         </el-dialog>
 
 
@@ -1092,6 +1143,7 @@ const exam=()=>{
 .ordercard {
     width: 80%;
     margin: auto;
+    overflow:auto;
 }
 
 .card-header {
@@ -1115,5 +1167,13 @@ const exam=()=>{
 .el-table{
     margin: auto;
 }
-
+/* 表单 */
+.qz {
+    width: 95%;
+margin: 20px auto;
+margin-left:100px
+}
+v-deep.kongbai {
+    width: 200px;
+}
 </style>

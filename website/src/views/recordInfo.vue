@@ -140,7 +140,7 @@ onMounted(async () => {
 })
 
 const getDetail= (index,id) =>{
-    router.push({name:'orderinfo',params:{id:id}})
+    router.push({name:'orderinfo',params:{id:id,projectnname:infoForm.data.name}})
     // router.push({path:'/orderInfo',params:{id:id}})
 }
 
