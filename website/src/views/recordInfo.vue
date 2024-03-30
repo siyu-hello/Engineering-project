@@ -13,7 +13,7 @@ const orderInfo = useorderInfo()
 
 const route = useRoute()
 const router = useRouter()
-const recordInfo = userecordInfo()
+const recordInfo = userecordInfo() 
 const infoForm = reactive({ data: {} })
 
 
@@ -140,7 +140,7 @@ onMounted(async () => {
 })
 
 const getDetail= (index,id) =>{
-    router.push({name:'orderinfo',params:{id:id,projectnname:infoForm.data.name}})
+    router.push({name:'orderinfo',params:{id:id,name:infoForm.data.name}})
     // router.push({path:'/orderInfo',params:{id:id}})
 }
 

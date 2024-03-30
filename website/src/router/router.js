@@ -60,7 +60,7 @@ const routes = [
             },
             {
                 name:'orderinfo',
-                path: '/orderInfo/:id',
+                path: '/orderInfo/:id/:name',
                 component: () => import("../views/orderInfo.vue")
             },
             {

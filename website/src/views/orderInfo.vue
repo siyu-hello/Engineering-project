@@ -8,24 +8,22 @@ import { useRoute } from 'vue-router'
 
 const user = ref(sessionStorage.getItem('username'))
 const route = useRoute()
-const projectnname=ref(route.params.projectnname)
-console.log(projectnname.value)
+const projectname=ref(route.params.name)
 const projectid=ref(route.params.id)
-console.log(projectid.value)
 const orderInfo = useorderInfo()
 const infoForm = reactive({ data: {} })
 const FormVisible = ref(false)
 
-const FormVisibleEM = ref(false)
-const FormVisibleWC = ref(false)
-const FormVisibleSWC = ref(false)
-const FormVisibleCC = ref(false)
-const FormVisibleSM = ref(false)
-const FormVisibleCL = ref(false)
-const FormVisibleSL = ref(false)
-const FormVisibleDL = ref(false)
-const FormVisibleDR = ref(false)
-const FormVisibleDC = ref(false)
+// const FormVisibleEM = ref(false)
+// const FormVisibleWC = ref(false)
+// const FormVisibleSWC = ref(false)
+// const FormVisibleCC = ref(false)
+// const FormVisibleSM = ref(false)
+// const FormVisibleCL = ref(false)
+// const FormVisibleSL = ref(false)
+// const FormVisibleDL = ref(false)
+// const FormVisibleDR = ref(false)
+// const FormVisibleDC = ref(false)
 
 
 onMounted(async () => {
@@ -523,7 +521,6 @@ const getoporder= () =>{
                 if(state.value==step.data[i].state){
                     active.value=++i
                     nextrole.value=step.data[i].state
-                    console.log(nextrole.value)
                 }
             }
         }
@@ -539,6 +536,7 @@ const exam=()=>{
         ElMessage.error('暂无审批权限')
     }
 }
+
 
 </script>
 
@@ -561,151 +559,149 @@ const exam=()=>{
                     </div>
                 </div>
             </template>
-            <el-descriptions :column="2">
-                <el-descriptions-item>工单名称：{{infoForm.data.name}}</el-descriptions-item>
-                <el-descriptions-item>工单状态：{{infoForm.data.state}}</el-descriptions-item>
+            <div class="main">
+            <!-- <el-descriptions :column="2"> -->
+                <!-- <div>工单名称：{{infoForm.data.name}}</div>
+                <div>工单状态：{{infoForm.data.state}}</div> -->
+                <div>项目名称：{{projectname}}</div>
                 <!-- 十个文件 -->
-                <el-descriptions-item v-if="typeid=='1' && infoForm.data.EngineMeasure==''">签证计量单：<el-button type="danger" plain size="small" @click="addEngineMeasure(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item width="80%" v-if="typeid=='1' && infoForm.data.EngineMeasure!=''">签证计量单：
-                   <el-card shadow="never" class="qz">
-                    <div class="liannxi">签证内容：{{infoForm.data.EngineMeasure[0].content}}</div>
-                    
-                    <!-- <el-descriptions :column="1">
-                    <el-descriptions-item label="签证内容:">{{infoForm.data.EngineMeasure[0].content}}</el-descriptions-item>
-            </el-descriptions> --></el-card> 
-                
-                </el-descriptions-item>
-
-                <el-descriptions-item v-if="typeid=='2' && infoForm.data.WorkContact==''">工作联系单：<el-button type="danger" plain size="small" @click="addWorkContact(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item width="80%" v-if="typeid=='2' && infoForm.data.WorkContact!=''">工作联系单：
-                <el-card shadow="never" class="qz">
-                    <div class="liannxi">联系事项：{{infoForm.data.WorkContact[0].content }}</div>
-                    <!-- <el-descriptions :column="1">
-                        
-                                    <el-descriptions-item style="overflow: auto;" label="联系事项:"></el-descriptions-item>
-                            </el-descriptions> -->
-                </el-card>
-                </el-descriptions-item>
-
-                <el-descriptions-item v-if="typeid=='3' && infoForm.data.SWorkContact==''">监理工作联系单：<el-button type="danger" plain size="small" @click="addSWorkContact(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item width="80%" v-if="typeid=='3' && infoForm.data.SWorkContact!=''">监理工作联系单：
-                <el-card shadow="never" class="qz"> 
-                   
-                    <div class="liannxi" >联系事项：{{infoForm.data.SWorkContact[0].content}}</div>
-                    <div class="liannxi">事由：{{infoForm.data.SWorkContact[0].why}}</div>
-           
-                </el-card>    
-                
-                </el-descriptions-item>
-
-                <el-descriptions-item v-if="typeid=='4' && infoForm.data.ChangContact==''">合同变更申请单：<el-button type="danger" plain size="small" @click="addChangContact(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item width="80%" v-if="typeid=='4' && infoForm.data.ChangContact!=''">合同变更申请单：
+                <div v-if="typeid=='1' && infoForm.data.EngineMeasure==''">签证计量单：<el-button type="danger" plain size="small" @click="addEngineMeasure(infoForm.data.record_id)" >+添加</el-button></div>
+                <div width="80%" v-if="typeid=='1' && infoForm.data.EngineMeasure!=''">签证计量单：
                     <el-card shadow="never" class="qz">
-                  
-                    <div class="liannxi" >原因：{{infoForm.data.ChangContact[0].why}}</div>
+                        <el-descriptions :column="1">
+                            <el-descriptions-item label="签证内容:">{{infoForm.data.EngineMeasure[0].content}}</el-descriptions-item>
+                        </el-descriptions>
+                    </el-card> 
+                </div>
 
-                </el-card>
-                </el-descriptions-item>
-
-                <el-descriptions-item v-if="typeid=='5' && infoForm.data.SuperMeeting==''">监理会议纪要：<el-button type="danger" plain size="small" @click="addSuperMeeting(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item width="80%" v-if="typeid=='5' && infoForm.data.SuperMeeting!=''">监理会议纪要：
+                <div v-if="typeid=='2' && infoForm.data.WorkContact==''">工作联系单：<el-button type="danger" plain size="small" @click="addWorkContact(infoForm.data.record_id)" >+添加</el-button></div>
+                <div width="80%" v-if="typeid=='2' && infoForm.data.WorkContact!=''">工作联系单：
                     <el-card shadow="never" class="qz">
-                        
-                    <div class="liannxi">会议地点:{{infoForm.data.SuperMeeting[0].place}}</div>
-                    <div class="liannxi">主要议题:{{infoForm.data.SuperMeeting[0].content}}</div>
-                    <div class="liannxi">解决或议定事项:{{infoForm.data.SuperMeeting[0].agreedMatters}}</div>
-                    <div class="liannxi">主持人:{{infoForm.data.SuperMeeting[0].hostName}}</div>
-                    <div class="liannxi">建设单位人员:{{infoForm.data.SuperMeeting[0].ownerName}}</div>
-                    <div class="liannxi">设计单位人员:{{infoForm.data.SuperMeeting[0].designName}}</div>
-                    <div class="liannxi">监理单位人员:{{infoForm.data.SuperMeeting[0].superName}}</div>
-                    <div class="liannxi">施工单位人员:{{infoForm.data.SuperMeeting[0].constructName}}</div>
-           
+                        <el-descriptions :column="1">
+                            <el-descriptions-item label="联系事项:">{{infoForm.data.WorkContact[0].content}}</el-descriptions-item>
+                        </el-descriptions>
                     </el-card>
+                </div>
 
-                </el-descriptions-item>
-
-                <el-descriptions-item v-if="typeid=='9' && infoForm.data.ConstructLog==''">施工日志：<el-button type="danger" plain size="small" @click="addConstructLog(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item v-if="typeid=='9' && infoForm.data.ConstructLog!=''">施工日志：
-<el-card shadow="never" class="qz">
-                    <div class="liannxi">天气:{{infoForm.data.ConstructLog[0].weather}}</div>
-                    <div class="liannxi">最低及最高气温:{{infoForm.data.ConstructLog[0].temperature}}</div>
-                    <div class="liannxi">班组:{{infoForm.data.ConstructLog[0].group}}</div>
-                    <div class="liannxi">班组负责人:{{infoForm.data.ConstructLog[0].groupManage}}</div>
-                    <div class="liannxi">施工部位:{{infoForm.data.ConstructLog[0].constructArea}}</div>
-                    <div class="liannxi">施工内容:{{infoForm.data.ConstructLog[0].content}}</div>
-                    <div class="liannxi">质量情况:{{infoForm.data.ConstructLog[0].result}}</div>
-                    <div class="liannxi">设计变更交底:{{infoForm.data.ConstructLog[0].changePaper}}</div>
-                    <div class="liannxi">验收部位:{{infoForm.data.ConstructLog[0].inspectionArea}}</div>
-                    <div class="liannxi">材料使用情况:{{infoForm.data.ConstructLog[0].materialSituation}}</div>
-                    <div class="liannxi">材料留置:{{infoForm.data.ConstructLog[0].materialTake}}</div>
-                    <div class="liannxi">交接检查情况:{{infoForm.data.ConstructLog[0].handOverSituation}}</div>
-                    <div class="liannxi">机械使用情况:{{infoForm.data.ConstructLog[0].machineSituation}}</div>
-                    <div class="liannxi">安全:{{infoForm.data.ConstructLog[0].safe}}</div>
-                    <div class="liannxi">处理方法:{{infoForm.data.ConstructLog[0].processMethod}}</div>
-</el-card>
-                </el-descriptions-item>
-
-                <el-descriptions-item v-if="typeid=='6' && infoForm.data.SuperLog==''">监理日志：<el-button type="danger" plain size="small" @click="addSuperLog(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item width="80%" v-if="typeid=='6' && infoForm.data.SuperLog!=''">监理日志：
+                <div v-if="typeid=='3' && infoForm.data.SWorkContact==''">监理工作联系单：<el-button type="danger" plain size="small" @click="addSWorkContact(infoForm.data.record_id)" >+添加</el-button></div>
+                <div width="80%" v-if="typeid=='3' && infoForm.data.SWorkContact!=''">监理工作联系单：
                     <el-card shadow="never" class="qz"> 
-                    
-                    <div  class="liannxi">天气:{{infoForm.data.SuperLog[0].weather}}</div>
-                    <div  class="liannxi">最低及最高气温:{{infoForm.data.SuperLog[0].temperature}}</div>
-                    <div  class="liannxi">班组:{{infoForm.data.SuperLog[0].group}}</div>
-                    <div  class="liannxi">施工人数:{{infoForm.data.SuperLog[0].number}}</div>
-                    <div  class="liannxi">施工部位:{{infoForm.data.SuperLog[0].constructArea}}</div>
-                    <div  class="liannxi">施工内容:{{infoForm.data.SuperLog[0].content}}</div>
-                    <div  class="liannxi">质量检查情况:{{infoForm.data.SuperLog[0].result}}</div>
-                    <div  class="liannxi">设备报验:{{infoForm.data.SuperLog[0].equipmentInspection}}</div>
-                    <div  class="liannxi">工程报验:{{infoForm.data.SuperLog[0].projectInspection}}</div>
-                    <div  class="liannxi">取样送检:{{infoForm.data.SuperLog[0].sampling}}</div>
-                    <div  class="liannxi">旁站监理:{{infoForm.data.SuperLog[0].sitSuper}}</div>
-                    <div  class="liannxi">监理通知:{{infoForm.data.SuperLog[0].superNotice}}</div>
-          
-                </el-card>    
-                
-                </el-descriptions-item>
+                        <el-descriptions :column="1">
+                            <el-descriptions-item label="联系事项:">{{infoForm.data.SWorkContact[0].content}}</el-descriptions-item>
+                            <el-descriptions-item label="事由:">{{infoForm.data.SWorkContact[0].why}}</el-descriptions-item>
+                        </el-descriptions>
+                    </el-card>    
+                </div>
 
-                <el-descriptions-item v-if="typeid=='7' && infoForm.data.DealLog==''">洽商记录：<el-button type="danger" plain size="small" @click="addDealLog(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item width="80%" v-if="typeid=='7' && infoForm.data.DealLog!=''">洽商记录：<el-card shadow="never" class="qz">
-                   
-                    <div class="liannxi">洽商主题:{{infoForm.data.DealLog[0].title}}</div>
-                    <div class="liannxi">洽商地址:{{infoForm.data.DealLog[0].address}}</div>
-                    <div class="liannxi">洽商主持人:{{infoForm.data.DealLog[0].host}}</div>
-                    <div class="liannxi">洽商内容:{{infoForm.data.DealLog[0].content}}</div>
-                    <div class="liannxi">洽商结果:{{infoForm.data.DealLog[0].result}}</div>
-
-                </el-card>
-                </el-descriptions-item>
-
-                <el-descriptions-item v-if="typeid=='10' && infoForm.data.DrawingReview==''">图纸会审记录：<el-button type="danger" plain size="small" @click="addDrawingReview(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item width="80%" v-if="typeid=='10' && infoForm.data.DrawingReview!=''">图纸会审记录：
+                <div v-if="typeid=='4' && infoForm.data.ChangContact==''">合同变更申请单：<el-button type="danger" plain size="small" @click="addChangContact(infoForm.data.record_id)" >+添加</el-button></div>
+                <div width="80%" v-if="typeid=='4' && infoForm.data.ChangContact!=''">合同变更申请单：
                     <el-card shadow="never" class="qz">
-                  
-                    <div class="liannxi">地点:{{infoForm.data.DrawingReview[0].place}}</div>
-                    <div class="liannxi">专业名称:{{infoForm.data.DrawingReview[0].proName}}</div>
-                    <div class="liannxi">主持人:{{infoForm.data.DrawingReview[0].host}}</div>
-                    <div class="liannxi">记录人:{{infoForm.data.DrawingReview[0].recorder}}</div>
-                    <div class="liannxi">图纸问题:{{infoForm.data.DrawingReview[0].why}}</div>
-                    <div class="liannxi">图号:{{infoForm.data.DrawingReview[0].picNumber}}</div>
-                    <div class="liannxi">会审记录:{{infoForm.data.DrawingReview[0].content}}</div>
-          
-                </el-card>
-                </el-descriptions-item>
-
-                <el-descriptions-item v-if="typeid=='8' && infoForm.data.DesignChange==''">设计变更：<el-button type="danger" plain size="small" @click="addDesignChange(infoForm.data.record_id)" >+添加</el-button></el-descriptions-item>
-                <el-descriptions-item width="80%" v-if="typeid=='8' && infoForm.data.DesignChange!=''">设计变更：
-                    <el-card shadow="never" class="qz">
-                       
-                    <div class="liannxi">变更原因:{{infoForm.data.DesignChange[0].why}}</div>
-                    <div class="liannxi">图号:{{infoForm.data.DesignChange[0].picNumber}}</div>
-                    <div class="liannxi">洽商内容:{{infoForm.data.DesignChange[0].content}}</div>
-          
-
+                        <el-descriptions :column="1">
+                            <el-descriptions-item label="原因:">{{infoForm.data.ChangContact[0].why}}</el-descriptions-item>
+                        </el-descriptions>
                     </el-card>
-                
-                </el-descriptions-item>
-            <el-descriptions-item>  </el-descriptions-item>
+                </div>
+
+                <div v-if="typeid=='5' && infoForm.data.SuperMeeting==''">监理会议纪要：<el-button type="danger" plain size="small" @click="addSuperMeeting(infoForm.data.record_id)" >+添加</el-button></div>
+                <div width="80%" v-if="typeid=='5' && infoForm.data.SuperMeeting!=''">监理会议纪要：
+                    <el-card shadow="never" class="qz">
+                        <el-descriptions :column="1">
+                            <el-descriptions-item label="会议地点:">{{infoForm.data.SuperMeeting[0].place}}</el-descriptions-item>
+                            <el-descriptions-item label="主要议题:">{{infoForm.data.SuperMeeting[0].content}}</el-descriptions-item>
+                            <el-descriptions-item label="解决或议定事项:">{{infoForm.data.SuperMeeting[0].agreedMatters}}</el-descriptions-item>
+                            <el-descriptions-item label="主持人:">{{infoForm.data.SuperMeeting[0].hostName}}</el-descriptions-item>
+                            <el-descriptions-item label="建设单位人员:">{{infoForm.data.SuperMeeting[0].ownerName}}</el-descriptions-item>
+                            <el-descriptions-item label="设计单位人员:">{{infoForm.data.SuperMeeting[0].designName}}</el-descriptions-item>
+                            <el-descriptions-item label="监理单位人员:">{{infoForm.data.SuperMeeting[0].superName}}</el-descriptions-item>
+                            <el-descriptions-item label="施工单位人员:">{{infoForm.data.SuperMeeting[0].constructName}}</el-descriptions-item>
+                        </el-descriptions>
+                    </el-card>
+                </div>
+
+                <div v-if="typeid=='9' && infoForm.data.ConstructLog==''">施工日志：<el-button type="danger" plain size="small" @click="addConstructLog(infoForm.data.record_id)" >+添加</el-button></div>
+                <div v-if="typeid=='9' && infoForm.data.ConstructLog!=''">施工日志：
+                    <el-card shadow="never" class="qz">
+                        <el-descriptions :column="1">
+                            <el-descriptions-item label="天气:">{{infoForm.data.ConstructLog[0].weather}}</el-descriptions-item>
+                            <el-descriptions-item label="最低及最高气温:">{{infoForm.data.ConstructLog[0].temperature}}</el-descriptions-item>
+                            <el-descriptions-item label="班组:">{{infoForm.data.ConstructLog[0].group}}</el-descriptions-item>
+                            <el-descriptions-item label="班组负责人:">{{infoForm.data.ConstructLog[0].groupManage}}</el-descriptions-item>
+                            <el-descriptions-item label="施工部位:">{{infoForm.data.ConstructLog[0].constructArea}}</el-descriptions-item>
+                            <el-descriptions-item label="施工内容:">{{infoForm.data.ConstructLog[0].content}}</el-descriptions-item>
+                            <el-descriptions-item label="质量情况:">{{infoForm.data.ConstructLog[0].result}}</el-descriptions-item>
+                            <el-descriptions-item label="设计变更交底:">{{infoForm.data.ConstructLog[0].changePaper}}</el-descriptions-item>
+                            <el-descriptions-item label="验收部位:">{{infoForm.data.ConstructLog[0].inspectionArea}}</el-descriptions-item>
+                            <el-descriptions-item label="材料使用情况:">{{infoForm.data.ConstructLog[0].materialSituation}}</el-descriptions-item>
+                            <el-descriptions-item label="材料留置:">{{infoForm.data.ConstructLog[0].materialTake}}</el-descriptions-item>
+                            <el-descriptions-item label="交接检查情况:">{{infoForm.data.ConstructLog[0].handOverSituation}}</el-descriptions-item>
+                            <el-descriptions-item label="机械使用情况:">{{infoForm.data.ConstructLog[0].machineSituation}}</el-descriptions-item>
+                            <el-descriptions-item label="安全:">{{infoForm.data.ConstructLog[0].safe}}</el-descriptions-item>
+                            <el-descriptions-item label="处理方法:">{{infoForm.data.ConstructLog[0].processMethod}}</el-descriptions-item>
+                        </el-descriptions>
+                    </el-card>
+                </div>
+
+                <div v-if="typeid=='6' && infoForm.data.SuperLog==''">监理日志：<el-button type="danger" plain size="small" @click="addSuperLog(infoForm.data.record_id)" >+添加</el-button></div>
+                <div width="80%" v-if="typeid=='6' && infoForm.data.SuperLog!=''">监理日志：
+                    <el-card shadow="never" class="qz"> 
+                        <el-descriptions :column="1">
+                            <el-descriptions-item label="天气:">{{infoForm.data.SuperLog[0].weather}}</el-descriptions-item>
+                            <el-descriptions-item label="最低及最高气温:">{{infoForm.data.SuperLog[0].temperature}}</el-descriptions-item>
+                            <el-descriptions-item label="班组:">{{infoForm.data.SuperLog[0].group}}</el-descriptions-item>
+                            <el-descriptions-item label="施工人数:">{{infoForm.data.SuperLog[0].number}}</el-descriptions-item>
+                            <el-descriptions-item label="施工部位:">{{infoForm.data.SuperLog[0].constructArea}}</el-descriptions-item>
+                            <el-descriptions-item label="施工内容:">{{infoForm.data.SuperLog[0].content}}</el-descriptions-item>
+                            <el-descriptions-item label="质量检查情况:">{{infoForm.data.SuperLog[0].result}}</el-descriptions-item>
+                            <el-descriptions-item label="设备报验:">{{infoForm.data.SuperLog[0].equipmentInspection}}</el-descriptions-item>
+                            <el-descriptions-item label="工程报验:">{{infoForm.data.SuperLog[0].projectInspection}}</el-descriptions-item>
+                            <el-descriptions-item label="取样送检:">{{infoForm.data.SuperLog[0].sampling}}</el-descriptions-item>
+                            <el-descriptions-item label="旁站监理:">{{infoForm.data.SuperLog[0].sitSuper}}</el-descriptions-item>
+                            <el-descriptions-item label="监理通知:">{{infoForm.data.SuperLog[0].superNotice}}</el-descriptions-item>
+                        </el-descriptions>
+                    </el-card>    
+                </div>
+
+                <div v-if="typeid=='7' && infoForm.data.DealLog==''">洽商记录：<el-button type="danger" plain size="small" @click="addDealLog(infoForm.data.record_id)" >+添加</el-button></div>
+                <div width="80%" v-if="typeid=='7' && infoForm.data.DealLog!=''">洽商记录：
+                    <el-card shadow="never" class="qz">
+                        <el-descriptions :column="1">
+                            <el-descriptions-item label="洽商主题:" label-style="font-weight=bold;">{{infoForm.data.DealLog[0].title}}</el-descriptions-item>
+                            <el-descriptions-item label="洽商地址:">{{infoForm.data.DealLog[0].address}}</el-descriptions-item>
+                            <el-descriptions-item label="洽商主持人:">{{infoForm.data.DealLog[0].host}}</el-descriptions-item>
+                            <el-descriptions-item label="洽商内容:">{{infoForm.data.DealLog[0].content}}</el-descriptions-item>
+                            <el-descriptions-item label="洽商结果:">{{infoForm.data.DealLog[0].result}}</el-descriptions-item>
+                        </el-descriptions>
+                    </el-card>
+                </div>
+
+                <div v-if="typeid=='10' && infoForm.data.DrawingReview==''">图纸会审记录：<el-button type="danger" plain size="small" @click="addDrawingReview(infoForm.data.record_id)" >+添加</el-button></div>
+                <div width="80%" v-if="typeid=='10' && infoForm.data.DrawingReview!=''">图纸会审记录：
+                    <el-card shadow="never" class="qz">
+                        <el-descriptions :column="1">
+                            <el-descriptions-item label="地点:">{{infoForm.data.DrawingReview[0].place}}</el-descriptions-item>
+                            <el-descriptions-item label="专业名称:">{{infoForm.data.DrawingReview[0].proName}}</el-descriptions-item>
+                            <el-descriptions-item label="主持人:">{{infoForm.data.DrawingReview[0].host}}</el-descriptions-item>
+                            <el-descriptions-item label="记录人:">{{infoForm.data.DrawingReview[0].recorder}}</el-descriptions-item>
+                            <el-descriptions-item label="图纸问题:">{{infoForm.data.DrawingReview[0].why}}</el-descriptions-item>
+                            <el-descriptions-item label="图号:">{{infoForm.data.DrawingReview[0].picNumber}}</el-descriptions-item>
+                            <el-descriptions-item label="会审记录:">{{infoForm.data.DrawingReview[0].content}}</el-descriptions-item>
+                        </el-descriptions>
+                    </el-card>
+                </div>
+
+                <div v-if="typeid=='8' && infoForm.data.DesignChange==''">设计变更：<el-button type="danger" plain size="small" @click="addDesignChange(infoForm.data.record_id)" >+添加</el-button></div>
+                <div width="80%" v-if="typeid=='8' && infoForm.data.DesignChange!=''">设计变更：
+                    <el-card shadow="never" class="qz">
+                        <el-descriptions :column="1">
+                            <el-descriptions-item label="变更原因:">{{infoForm.data.DesignChange[0].why}}</el-descriptions-item>
+                            <el-descriptions-item label="图号:">{{infoForm.data.DesignChange[0].picNumber}}</el-descriptions-item>
+                            <el-descriptions-item label="洽商内容:">{{infoForm.data.DesignChange[0].content}}</el-descriptions-item>
+                        </el-descriptions>
+                    </el-card>
+                </div>
+
+            </div>
+            <el-descriptions :column="2">
                 <!--  -->
                 <el-descriptions-item v-if="infoForm.data.ownerOp==''">建设单位意见：<span style="color: #F56C6C;">待审核..</span></el-descriptions-item>
                 <el-descriptions-item v-else>建设单位意见：{{infoForm.data.ownerOp}}</el-descriptions-item>
@@ -719,48 +715,6 @@ const exam=()=>{
                
             </el-descriptions>
         </el-card>
-
-        <!-- 签证计量单 -->
-        <div v-if="FormVisibleEM" title="签证计量单">
-           
-        </div>
-        <!-- 工作联系单 -->
-        <el-dialog v-model="FormVisibleWC" title="工作联系单">
-           
-        </el-dialog>
-        <!-- 监理工作联系单 -->
-        <el-dialog v-model="FormVisibleSWC" title="监理工作联系单">
-           
-        </el-dialog>
-        <!-- 合同变更申请单 -->
-        <el-dialog v-model="FormVisibleCC" title="合同变更申请单">
-           
-        </el-dialog>
-        <!-- 监理会议纪要 -->
-        <el-dialog v-model="FormVisibleSM" title="监理会议纪要">
-            
-        </el-dialog>
-        <!-- 施工日志 -->
-        <el-dialog v-model="FormVisibleCL" title="施工日志">
-          
-        </el-dialog>
-        <!-- 监理日志 -->
-        <el-dialog v-model="FormVisibleSL" title="监理日志">
-            
-        </el-dialog>
-        <!-- 洽商记录 -->
-        <el-dialog v-model="FormVisibleDL" title="洽商记录">
-           
-        </el-dialog>
-        <!-- 图纸会审记录 -->
-        <el-dialog v-model="FormVisibleDR" title="图纸会审记录">
-           
-        </el-dialog>
-        <!-- 设计变更 -->
-        <el-dialog v-model="FormVisibleDC" title="设计变更">
-           
-        </el-dialog>
-
 
         <!-- 审批 -->
         <el-dialog v-model="FormVisible11" title="工单审批" @close="closeDialog1">
@@ -1163,6 +1117,10 @@ const exam=()=>{
     white-space: pre-wrap;
     font-size: 15px;
 }
+.main{
+    text-align: left;
+    font-size: small;
+}
 
 .step{
     width:60%;
@@ -1174,8 +1132,11 @@ const exam=()=>{
 /* 表单 */
 .qz {
     width: 95%;
-margin: 20px auto;
-margin-left:100px
+/* margin: 20px auto; */
+/* margin-left:100px */
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    word-break: break-all;
 }
 .liannxi {
     white-space:normal; word-break:break-all;overflow:hidden;
