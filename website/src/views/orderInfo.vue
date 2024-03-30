@@ -14,18 +14,6 @@ const orderInfo = useorderInfo()
 const infoForm = reactive({ data: {} })
 const FormVisible = ref(false)
 
-// const FormVisibleEM = ref(false)
-// const FormVisibleWC = ref(false)
-// const FormVisibleSWC = ref(false)
-// const FormVisibleCC = ref(false)
-// const FormVisibleSM = ref(false)
-// const FormVisibleCL = ref(false)
-// const FormVisibleSL = ref(false)
-// const FormVisibleDL = ref(false)
-// const FormVisibleDR = ref(false)
-// const FormVisibleDC = ref(false)
-
-
 onMounted(async () => {
     // 加载项目信息
     await getorder()
@@ -43,22 +31,17 @@ const closeDialog = () =>{
 }
 
 // 添加签证计量单
-const FormVisible1 = ref(false)
 const EMdata = reactive({
     "content":'',
     "record_id":''
 })
-const addEngineMeasure= (id) =>{
+const addEMconfirm= (id) =>{
     EMdata.record_id = id
-    FormVisible1.value = true
-}
-const addEMconfirm= () =>{
     axios.post('/api/add/engine/measure/',EMdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
             getorder()
-            FormVisible1.value = false
         }
         else{
             ElMessage.error('出错了！')
@@ -67,22 +50,17 @@ const addEMconfirm= () =>{
 }
 
 // 添加工作联系单
-const FormVisible2 = ref(false)
 const WCdata = reactive({
     "content":'',
     "record_id":''
 })
-const addWorkContact= (id) =>{
+const addWCconfirm= (id) =>{
     WCdata.record_id = id
-    FormVisible2.value = true
-}
-const addWCconfirm= () =>{
     axios.post('/api/add/work/contact/ ',WCdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
             getorder()
-            FormVisible2.value = false
         }
         else{
             ElMessage.error('出错了！')
@@ -98,23 +76,18 @@ const filedata = reactive({
 })
 
 // 添加监理工作联系单
-const FormVisible3 = ref(false)
 const SWCdata = reactive({
     "content":'',
     "why":'',
     "record_id":''
 })
-const addSWorkContact= (id) =>{
+const addSWCconfirm= (id) =>{
     SWCdata.record_id = id
-    FormVisible3.value = true
-}
-const addSWCconfirm= () =>{
     axios.post('/api/add/swork/contact/ ',SWCdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
             getorder()
-            FormVisible3.value = false
         }
         else{
             ElMessage.error('出错了！')
@@ -123,22 +96,17 @@ const addSWCconfirm= () =>{
 }
 
 // 添加合同变更申请单
-const FormVisible4 = ref(false)
 const CCdata = reactive({
     "why":'',
     "record_id":''
 })
-const addChangContact= (id) =>{
+const addCCconfirm= (id) =>{
     CCdata.record_id = id
-    FormVisible4.value = true
-}
-const addCCconfirm= () =>{
     axios.post('/api/add/change/contact/ ',CCdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
             getorder()
-            FormVisible4.value = false
         }
         else{
             ElMessage.error('出错了！')
@@ -147,7 +115,6 @@ const addCCconfirm= () =>{
 }
 
 // 添加监理会议纪要
-const FormVisible5 = ref(false)
 const SMdata = reactive({
     "place":'',
     "content":'',
@@ -159,17 +126,13 @@ const SMdata = reactive({
     "constructName":'',
     "record_id":''
 })
-const addSuperMeeting= (id) =>{
+const addSMconfirm= (id) =>{
     SMdata.record_id = id
-    FormVisible5.value = true
-}
-const addSMconfirm= () =>{
     axios.post('/api/add/super/meeting/ ',SMdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
             getorder()
-            FormVisible5.value = false
         }
         else{
             ElMessage.error('出错了！')
@@ -178,7 +141,6 @@ const addSMconfirm= () =>{
 }
 
 // 添加施工日志
-const FormVisible6 = ref(false)
 const CLdata = reactive({
     "weather":'',
     "temperature":'',
@@ -197,17 +159,13 @@ const CLdata = reactive({
     "processMethod":'',
     "record_id":''
 })
-const addConstructLog= (id) =>{
+const addCLconfirm= (id) =>{
     CLdata.record_id = id
-    FormVisible6.value = true
-}
-const addCLconfirm= () =>{
     axios.post('/api/add/construct/log/ ',CLdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
             getorder()
-            FormVisible6.value = false
         }
         else{
             ElMessage.error('出错了！')
@@ -216,7 +174,6 @@ const addCLconfirm= () =>{
 }
 
 // 添加洽商记录
-const FormVisible8 = ref(false)
 const DLdata = reactive({
     "title":'',
     "address":'',
@@ -225,17 +182,13 @@ const DLdata = reactive({
     "result":'',
     "record_id":''
 })
-const addDealLog= (id) =>{
+const addDLconfirm= (id) =>{
     DLdata.record_id = id
-    FormVisible8.value = true
-}
-const addDLconfirm= () =>{
     axios.post('/api/add/deal/log/ ',DLdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
             getorder()
-            FormVisible8.value = false
         }
         else{
             ElMessage.error('出错了！')
@@ -244,7 +197,6 @@ const addDLconfirm= () =>{
 }
 
 // 添加监理日志
-const FormVisible7 = ref(false)
 const SLdata = reactive({
     "weather":'',
     "temperature":'',
@@ -260,17 +212,13 @@ const SLdata = reactive({
     "superNotice":'',
     "record_id":''
 })
-const addSuperLog= (id) =>{
+const addSLconfirm= (id) =>{
     SLdata.record_id = id
-    FormVisible7.value = true
-}
-const addSLconfirm= () =>{
     axios.post('/api/add/super/log/ ',SLdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
             getorder()
-            FormVisible7.value = false
         }
         else{
             ElMessage.error('出错了！')
@@ -279,7 +227,6 @@ const addSLconfirm= () =>{
 }
 
 // 添加图纸会审记录
-const FormVisible9 = ref(false)
 const DRdata = reactive({
     "place":'',
     "proName":'',
@@ -290,17 +237,13 @@ const DRdata = reactive({
     "content":'',
     "record_id":''
 })
-const addDrawingReview= (id) =>{
+const addDRconfirm= (id) =>{
     DRdata.record_id = id
-    FormVisible9.value = true
-}
-const addDRconfirm= () =>{
     axios.post('/api/add/drawing/review/ ',DRdata)
     .then((res)=>{
         if(res.data.code==0){
             ElMessage.success('添加成功')
             getorder()
-            FormVisible9.value = false
         }
         else{
             ElMessage.error('出错了！')
@@ -316,11 +259,8 @@ const DCdata = reactive({
     "content":'',
     "record_id":''
 })
-const addDesignChange= (id) =>{
+const addDCconfirm= (id) =>{
     DCdata.record_id = id
-    FormVisible10.value = true
-}
-const addDCconfirm= () =>{
     axios.post('/api/add/design/change/',DCdata)
     .then((res)=>{
         if(res.data.code==0){
@@ -480,11 +420,128 @@ const getorder = async() =>{
                 typeid.value = infoForm.data.tableType_id
                 state.value = infoForm.data.state
                 getoporder()
+                confirmdata()
             }
         } catch (err) {
             console.log(err)
         }
 }
+
+//判断工单是否为空
+// const flag = (typeid.value=='1' && infoForm.data.EngineMeasure[0]!='')||(typeid.value=='2' && infoForm.data.WorkContact!='')||(typeid.value=='3' && infoForm.data.SWorkContact!='')||(typeid.value=='4' && infoForm.data.ChangContact!='')||(typeid.value=='5' && infoForm.data.SuperMeeting!='')||(typeid.value=='9' && infoForm.data.ConstructLog!='')||(typeid.value=='6' && infoForm.data.SuperLog!='')||(typeid.value=='7' && infoForm.data.DealLog!='')||(typeid.value=='10' && infoForm.data.DrawingReview!='')||(typeid.value=='8' && infoForm.data.DesignChange!='')
+const flag = ref('false')
+const EMlist = reactive({ data: [] })//签证计量单
+const WClist = reactive({ data:[] })//工作联系单
+const SWClist = reactive({ data: [] })//监理工作联系单
+const CClist = reactive({ data: [] })//合同变更申请单
+const SMlist = reactive({ data: [] })//监理会议纪要
+const CLlist = reactive({ data: [] })//施工日志
+const SLlist = reactive({ data: [] })//监理日志
+const DLlist = reactive({ data: [] })//洽商记录
+const DRlist = reactive({ data: [] })//图纸会审记录
+const DClist = reactive({ data: [] })//设计变更
+const confirmdata = () =>{
+    if(typeid.value=='1' && infoForm.data.EngineMeasure!=''){
+        EMlist.data = [{label:'内容：',value:infoForm.data.EngineMeasure[0].content}]
+        flag.value=true
+    }
+    if(typeid.value=='2' && infoForm.data.WorkContact!=''){
+        WClist.data = [{label:'内容：',value:infoForm.data.WorkContact[0].content}]
+        flag.value=true
+    }
+    if(typeid.value=='3' && infoForm.data.SWorkContact!=''){
+        SWClist.data = [
+            {label:'联系事项：',value:infoForm.data.SWorkContact[0].content},
+            {label:'事由：',value:infoForm.data.SWorkContact[0].why}
+        ]
+        flag.value=true
+    }
+    if(typeid.value=='4' && infoForm.data.ChangContact!=''){
+        CClist.data = [{label:'原因：',value:infoForm.data.ChangContact[0].why}]
+        flag.value=true
+    }
+    if(typeid.value=='5' && infoForm.data.SuperMeeting!=''){
+        SMlist.data = [
+            {label:'会议地点：',value:infoForm.data.SuperMeeting[0].place},
+            {label:'主要议题：',value:infoForm.data.SuperMeeting[0].content},
+            {label:'解决或议定事项：',value:infoForm.data.SuperMeeting[0].agreedMatters},
+            {label:'主持人：',value:infoForm.data.SuperMeeting[0].hostName},
+            {label:'建设单位人员：',value:infoForm.data.SuperMeeting[0].ownerName},
+            {label:'设计单位人员：',value:infoForm.data.SuperMeeting[0].designName},
+            {label:'监理单位人员：',value:infoForm.data.SuperMeeting[0].superName},
+            {label:'施工单位人员：',value:infoForm.data.SuperMeeting[0].constructName}
+        ]
+        flag.value=true
+    }
+    if(typeid.value=='9' && infoForm.data.ConstructLog!=''){
+        CLlist.data = [
+            {label:'天气：',value:infoForm.data.ConstructLog[0].weather},
+            {label:'最低及最高气温：',value:infoForm.data.ConstructLog[0].temperature},
+            {label:'班组：',value:infoForm.data.ConstructLog[0].group},
+            {label:'班组负责人：',value:infoForm.data.ConstructLog[0].groupManage},
+            {label:'施工部位：',value:infoForm.data.ConstructLog[0].constructArea},
+            {label:'施工内容：',value:infoForm.data.ConstructLog[0].content},
+            {label:'质量情况：',value:infoForm.data.ConstructLog[0].result},
+            {label:'设计变更交底：',value:infoForm.data.ConstructLog[0].changePaper},
+            {label:'验收部位：',value:infoForm.data.ConstructLog[0].inspectionArea},
+            {label:'材料使用情况：',value:infoForm.data.ConstructLog[0].materialSituation},
+            {label:'材料留置：',value:infoForm.data.ConstructLog[0].materialTake},
+            {label:'交接检查情况：',value:infoForm.data.ConstructLog[0].handOverSituation},
+            {label:'机械使用情况：',value:infoForm.data.ConstructLog[0].machineSituation},
+            {label:'安全：',value:infoForm.data.ConstructLog[0].safe},
+            {label:'处理方法：',value:infoForm.data.ConstructLog[0].processMethod}
+        ]
+        flag.value=true
+    }
+    if(typeid.value=='6' && infoForm.data.SuperLog!=''){
+        SLlist.data = [
+            {label:'天气：',value:infoForm.data.SuperLog[0].weather},
+            {label:'最低及最高气温：',value:infoForm.data.SuperLog[0].temperature},
+            {label:'班组：',value:infoForm.data.SuperLog[0].group},
+            {label:'施工人数：',value:infoForm.data.SuperLog[0].number},
+            {label:'施工部位：',value:infoForm.data.SuperLog[0].constructArea},
+            {label:'施工内容：',value:infoForm.data.SuperLog[0].content},
+            {label:'质量检查情况：',value:infoForm.data.SuperLog[0].result},
+            {label:'设备报验：',value:infoForm.data.SuperLog[0].equipmentInspection},
+            {label:'工程报验：',value:infoForm.data.SuperLog[0].projectInspection},
+            {label:'取样送检：',value:infoForm.data.SuperLog[0].sampling},
+            {label:'旁站送检：',value:infoForm.data.SuperLog[0].sitSuper},
+            {label:'监理通知：',value:infoForm.data.SuperLog[0].superNotice}
+        ]
+        flag.value=true
+    }
+    if(typeid.value=='7' && infoForm.data.DealLog!=''){
+        DLlist.data = [
+            {label:'洽商主题：',value:infoForm.data.DealLog[0].title},
+            {label:'洽商地址：',value:infoForm.data.DealLog[0].address},
+            {label:'洽商主持人：',value:infoForm.data.DealLog[0].host},
+            {label:'洽商内容：',value:infoForm.data.DealLog[0].content},
+            {label:'洽商结果：',value:infoForm.data.DealLog[0].result}
+        ]
+        flag.value=true
+    }
+    if(typeid.value=='10' && infoForm.data.DrawingReview!=''){
+        DRlist.data = [
+            {label:'地点：',value:infoForm.data.DrawingReview[0].place},
+            {label:'专业名称：',value:infoForm.data.DrawingReview[0].proName},
+            {label:'主持人：',value:infoForm.data.DrawingReview[0].host},
+            {label:'记录人：',value:infoForm.data.DrawingReview[0].recorder},
+            {label:'图纸问题：',value:infoForm.data.DrawingReview[0].why},
+            {label:'图号：',value:infoForm.data.DrawingReview[0].picNumber},
+            {label:'会审记录：',value:infoForm.data.DrawingReview[0].content}
+        ]
+        flag.value=true
+    }
+    if(typeid.value=='8' && infoForm.data.DesignChange!=''){
+        DClist.data = [
+            {label:'变更原因：',value:infoForm.data.DesignChange[0].why},
+            {label:'图号：',value:infoForm.data.DesignChange[0].picNumber},
+            {label:'洽商内容：',value:infoForm.data.DesignChange[0].content}
+        ]
+        flag.value=true
+    }
+}
+
 
 // 获取当前工单的流转顺序
 const oporder = ref('')
@@ -551,7 +608,7 @@ const exam=()=>{
                             <el-step v-for="item in step.data" :description="item.name" />
                         </el-steps>
                     </div>
-                    <div class="btn">
+                    <div class="btn" v-if="flag==true">
                     <el-button type="primary" class="button" @click="exam()">审批</el-button>
                     </div>
                     <div class="btn">
@@ -560,149 +617,345 @@ const exam=()=>{
                 </div>
             </template>
             <div class="main">
-            <!-- <el-descriptions :column="2"> -->
-                <!-- <div>工单名称：{{infoForm.data.name}}</div>
-                <div>工单状态：{{infoForm.data.state}}</div> -->
                 <div>项目名称：{{projectname}}</div>
                 <!-- 十个文件 -->
-                <div v-if="typeid=='1' && infoForm.data.EngineMeasure==''">签证计量单：<el-button type="danger" plain size="small" @click="addEngineMeasure(infoForm.data.record_id)" >+添加</el-button></div>
+                <div v-if="typeid=='1' && infoForm.data.EngineMeasure==''">签证计量单：
+                    <el-card shadow="never" class="add">
+                        <el-form :model="EMdata" label-width="auto">
+                            <el-form-item label="内容：" prop="content">
+                                <el-input type="textarea" autosize v-model="EMdata.content" />
+                            </el-form-item>
+                        </el-form>
+                        <el-button type="primary" @click="addEMconfirm(infoForm.data.record_id)">确认</el-button>
+                    </el-card>
+                </div>
                 <div width="80%" v-if="typeid=='1' && infoForm.data.EngineMeasure!=''">签证计量单：
                     <el-card shadow="never" class="qz">
-                        <el-descriptions :column="1">
-                            <el-descriptions-item label="签证内容:">{{infoForm.data.EngineMeasure[0].content}}</el-descriptions-item>
-                        </el-descriptions>
+                        <el-form label-width="auto">
+                            <el-form-item v-for="item in EMlist.data" :label="item.label">
+                                <el-input type="textarea" autosize disabled :placeholder="item.value" />
+                            </el-form-item>
+                        </el-form>
                     </el-card> 
                 </div>
 
-                <div v-if="typeid=='2' && infoForm.data.WorkContact==''">工作联系单：<el-button type="danger" plain size="small" @click="addWorkContact(infoForm.data.record_id)" >+添加</el-button></div>
+                <div v-if="typeid=='2' && infoForm.data.WorkContact==''">工作联系单：
+                    <el-card shadow="never" class="add">
+                        <el-form :model="WCdata" label-width="auto">
+                            <el-form-item label="内容：" prop="content">
+                                <el-input type="textarea" autosize v-model="WCdata.content" />
+                            </el-form-item>
+                        </el-form>
+                        <el-button type="primary" @click="addWCconfirm(infoForm.data.record_id)">确认</el-button>
+                    </el-card>
+                </div>
                 <div width="80%" v-if="typeid=='2' && infoForm.data.WorkContact!=''">工作联系单：
                     <el-card shadow="never" class="qz">
-                        <el-descriptions :column="1">
-                            <el-descriptions-item label="联系事项:">{{infoForm.data.WorkContact[0].content}}</el-descriptions-item>
-                        </el-descriptions>
+                        <el-form label-width="auto">
+                            <el-form-item v-for="item in WClist.data" :label="item.label">
+                                <el-input type="textarea" autosize disabled :placeholder="item.value" />
+                            </el-form-item>
+                        </el-form>
                     </el-card>
                 </div>
 
-                <div v-if="typeid=='3' && infoForm.data.SWorkContact==''">监理工作联系单：<el-button type="danger" plain size="small" @click="addSWorkContact(infoForm.data.record_id)" >+添加</el-button></div>
+                <div v-if="typeid=='3' && infoForm.data.SWorkContact==''">监理工作联系单：
+                    <el-card shadow="never" class="add">
+                        <el-form :model="SWCdata" label-width="auto">
+                            <el-form-item label="联系事项：" prop="content">
+                                <el-input type="textarea" autosize v-model="SWCdata.content" />
+                            </el-form-item>
+                            <el-form-item label="事由：" prop="why">
+                                <el-input type="textarea" autosize v-model="SWCdata.why" />
+                            </el-form-item>
+                        </el-form>
+                        <el-button type="primary" @click="addSWCconfirm(infoForm.data.record_id)">确认</el-button>
+                    </el-card>
+                </div>
                 <div width="80%" v-if="typeid=='3' && infoForm.data.SWorkContact!=''">监理工作联系单：
                     <el-card shadow="never" class="qz"> 
-                        <el-descriptions :column="1">
-                            <el-descriptions-item label="联系事项:">{{infoForm.data.SWorkContact[0].content}}</el-descriptions-item>
-                            <el-descriptions-item label="事由:">{{infoForm.data.SWorkContact[0].why}}</el-descriptions-item>
-                        </el-descriptions>
+                        <el-form label-width="auto">
+                            <el-form-item v-for="item in SWClist.data" :label="item.label">
+                                <el-input type="textarea" autosize disabled :placeholder="item.value" />
+                            </el-form-item>
+                        </el-form>
                     </el-card>    
                 </div>
 
-                <div v-if="typeid=='4' && infoForm.data.ChangContact==''">合同变更申请单：<el-button type="danger" plain size="small" @click="addChangContact(infoForm.data.record_id)" >+添加</el-button></div>
+                <div v-if="typeid=='4' && infoForm.data.ChangContact==''">合同变更申请单：
+                    <el-card shadow="never" class="add">
+                        <el-form :model="CCdata" label-width="auto">
+                            <el-form-item label="原因：" prop="why">
+                                <el-input type="textarea" autosize v-model="CCdata.why" />
+                            </el-form-item>
+                        </el-form>
+                        <el-button type="primary" @click="addCCconfirm(infoForm.data.record_id)">确认</el-button>
+                    </el-card>
+                </div>
                 <div width="80%" v-if="typeid=='4' && infoForm.data.ChangContact!=''">合同变更申请单：
                     <el-card shadow="never" class="qz">
-                        <el-descriptions :column="1">
-                            <el-descriptions-item label="原因:">{{infoForm.data.ChangContact[0].why}}</el-descriptions-item>
-                        </el-descriptions>
+                        <el-form label-width="auto">
+                            <el-form-item v-for="item in CClist.data" :label="item.label">
+                                <el-input type="textarea" autosize disabled :placeholder="item.value" />
+                            </el-form-item>
+                        </el-form>
                     </el-card>
                 </div>
 
-                <div v-if="typeid=='5' && infoForm.data.SuperMeeting==''">监理会议纪要：<el-button type="danger" plain size="small" @click="addSuperMeeting(infoForm.data.record_id)" >+添加</el-button></div>
+                <div v-if="typeid=='5' && infoForm.data.SuperMeeting==''">监理会议纪要：
+                    <el-card shadow="never" class="add">
+                        <el-form :model="SMdata" label-width="auto">
+                            <el-form-item label="会议地点：" prop="place">
+                                <el-input type="textarea" autosize v-model="SMdata.place" />
+                            </el-form-item>
+                            <el-form-item label="主要议题：" prop="content">
+                                <el-input type="textarea" autosize v-model="SMdata.content" />
+                            </el-form-item>
+                            <el-form-item label="解决或议定事项：" prop="agreedMatters">
+                                <el-input type="textarea" autosize v-model="SMdata.agreedMatters" />
+                            </el-form-item>
+                            <el-form-item label="主持人：" prop="hostName">
+                                <el-input type="textarea" autosize v-model="SMdata.hostName" />
+                            </el-form-item>
+                            <el-form-item label="建设单位人员：" prop="ownerName">
+                                <el-input type="textarea" autosize v-model="SMdata.ownerName" />
+                            </el-form-item>
+                            <el-form-item label="设计单位人员：" prop="designName">
+                                <el-input type="textarea" autosize v-model="SMdata.designName" />
+                            </el-form-item>
+                            <el-form-item label="监理单位人员：" prop="superName">
+                                <el-input type="textarea" autosize v-model="SMdata.superName" />
+                            </el-form-item>
+                            <el-form-item label="施工单位人员：" prop="constructName">
+                                <el-input type="textarea" autosize v-model="SMdata.constructName" />
+                            </el-form-item>
+                        </el-form>
+                        <el-button type="primary" @click="addSMconfirm(infoForm.data.record_id)">确认</el-button>
+                    </el-card>
+                </div>
                 <div width="80%" v-if="typeid=='5' && infoForm.data.SuperMeeting!=''">监理会议纪要：
                     <el-card shadow="never" class="qz">
-                        <el-descriptions :column="1">
-                            <el-descriptions-item label="会议地点:">{{infoForm.data.SuperMeeting[0].place}}</el-descriptions-item>
-                            <el-descriptions-item label="主要议题:">{{infoForm.data.SuperMeeting[0].content}}</el-descriptions-item>
-                            <el-descriptions-item label="解决或议定事项:">{{infoForm.data.SuperMeeting[0].agreedMatters}}</el-descriptions-item>
-                            <el-descriptions-item label="主持人:">{{infoForm.data.SuperMeeting[0].hostName}}</el-descriptions-item>
-                            <el-descriptions-item label="建设单位人员:">{{infoForm.data.SuperMeeting[0].ownerName}}</el-descriptions-item>
-                            <el-descriptions-item label="设计单位人员:">{{infoForm.data.SuperMeeting[0].designName}}</el-descriptions-item>
-                            <el-descriptions-item label="监理单位人员:">{{infoForm.data.SuperMeeting[0].superName}}</el-descriptions-item>
-                            <el-descriptions-item label="施工单位人员:">{{infoForm.data.SuperMeeting[0].constructName}}</el-descriptions-item>
-                        </el-descriptions>
+                        <el-form label-width="auto">
+                            <el-form-item v-for="item in SMlist.data" :label="item.label">
+                                <el-input type="textarea" autosize disabled :placeholder="item.value" />
+                            </el-form-item>
+                        </el-form>
                     </el-card>
                 </div>
 
-                <div v-if="typeid=='9' && infoForm.data.ConstructLog==''">施工日志：<el-button type="danger" plain size="small" @click="addConstructLog(infoForm.data.record_id)" >+添加</el-button></div>
+                <div v-if="typeid=='9' && infoForm.data.ConstructLog==''">施工日志：
+                    <el-card shadow="never" class="add">
+                        <el-form :model="CLdata" label-width="auto">
+                            <el-form-item label="天气：" prop="weather">
+                                <el-input type="textarea" autosize v-model="CLdata.weather" />
+                            </el-form-item>
+                            <el-form-item label="最低及最高气温：" prop="temperature">
+                                <el-input type="textarea" autosize v-model="CLdata.temperature" />
+                            </el-form-item>
+                            <el-form-item label="班组：" prop="group">
+                                <el-input type="textarea" autosize v-model="CLdata.group" />
+                            </el-form-item>
+                            <el-form-item label="班组负责人：" prop="groupManage">
+                                <el-input type="textarea" autosize v-model="CLdata.groupManage" />
+                            </el-form-item>
+                            <el-form-item label="施工部位：" prop="constructArea">
+                                <el-input type="textarea" autosize v-model="CLdata.constructArea" />
+                            </el-form-item>
+                            <el-form-item label="施工内容：" prop="content">
+                                <el-input type="textarea" autosize v-model="CLdata.content" />
+                            </el-form-item>
+                            <el-form-item label="质量情况：" prop="result">
+                                <el-input type="textarea" autosize v-model="CLdata.result" />
+                            </el-form-item>
+                            <el-form-item label="设计变更交底：" prop="changePaper">
+                                <el-input type="textarea" autosize v-model="CLdata.changePaper" />
+                            </el-form-item>
+                            <el-form-item label="验收部位：" prop="inspectionArea">
+                                <el-input type="textarea" autosize v-model="CLdata.inspectionArea" />
+                            </el-form-item>
+                            <el-form-item label="材料使用情况：" prop="materialSituation">
+                                <el-input type="textarea" autosize v-model="CLdata.materialSituation" />
+                            </el-form-item>
+                            <el-form-item label="材料留置：" prop="materialTake">
+                                <el-input type="textarea" autosize v-model="CLdata.materialTake" />
+                            </el-form-item>
+                            <el-form-item label="交接检查情况：" prop="handOverSituation">
+                                <el-input type="textarea" autosize v-model="CLdata.handOverSituation" />
+                            </el-form-item>
+                            <el-form-item label="机械使用情况：" prop="machineSituation">
+                                <el-input type="textarea" autosize v-model="CLdata.machineSituation" />
+                            </el-form-item>
+                            <el-form-item label="安全：" prop="safe">
+                                <el-input type="textarea" autosize v-model="CLdata.safe" />
+                            </el-form-item>
+                            <el-form-item label="处理方法：" prop="processMethod">
+                                <el-input type="textarea" autosize v-model="CLdata.processMethod" />
+                            </el-form-item>
+                        </el-form>
+                        <el-button type="primary" @click="addCLconfirm(infoForm.data.record_id)">确认</el-button>
+                    </el-card>
+                </div>
                 <div v-if="typeid=='9' && infoForm.data.ConstructLog!=''">施工日志：
                     <el-card shadow="never" class="qz">
-                        <el-descriptions :column="1">
-                            <el-descriptions-item label="天气:">{{infoForm.data.ConstructLog[0].weather}}</el-descriptions-item>
-                            <el-descriptions-item label="最低及最高气温:">{{infoForm.data.ConstructLog[0].temperature}}</el-descriptions-item>
-                            <el-descriptions-item label="班组:">{{infoForm.data.ConstructLog[0].group}}</el-descriptions-item>
-                            <el-descriptions-item label="班组负责人:">{{infoForm.data.ConstructLog[0].groupManage}}</el-descriptions-item>
-                            <el-descriptions-item label="施工部位:">{{infoForm.data.ConstructLog[0].constructArea}}</el-descriptions-item>
-                            <el-descriptions-item label="施工内容:">{{infoForm.data.ConstructLog[0].content}}</el-descriptions-item>
-                            <el-descriptions-item label="质量情况:">{{infoForm.data.ConstructLog[0].result}}</el-descriptions-item>
-                            <el-descriptions-item label="设计变更交底:">{{infoForm.data.ConstructLog[0].changePaper}}</el-descriptions-item>
-                            <el-descriptions-item label="验收部位:">{{infoForm.data.ConstructLog[0].inspectionArea}}</el-descriptions-item>
-                            <el-descriptions-item label="材料使用情况:">{{infoForm.data.ConstructLog[0].materialSituation}}</el-descriptions-item>
-                            <el-descriptions-item label="材料留置:">{{infoForm.data.ConstructLog[0].materialTake}}</el-descriptions-item>
-                            <el-descriptions-item label="交接检查情况:">{{infoForm.data.ConstructLog[0].handOverSituation}}</el-descriptions-item>
-                            <el-descriptions-item label="机械使用情况:">{{infoForm.data.ConstructLog[0].machineSituation}}</el-descriptions-item>
-                            <el-descriptions-item label="安全:">{{infoForm.data.ConstructLog[0].safe}}</el-descriptions-item>
-                            <el-descriptions-item label="处理方法:">{{infoForm.data.ConstructLog[0].processMethod}}</el-descriptions-item>
-                        </el-descriptions>
+                        <el-form label-width="auto">
+                            <el-form-item v-for="item in CLlist.data" :label="item.label">
+                                <el-input type="textarea" autosize disabled :placeholder="item.value" />
+                            </el-form-item>
+                        </el-form>
                     </el-card>
                 </div>
 
-                <div v-if="typeid=='6' && infoForm.data.SuperLog==''">监理日志：<el-button type="danger" plain size="small" @click="addSuperLog(infoForm.data.record_id)" >+添加</el-button></div>
+                <div v-if="typeid=='6' && infoForm.data.SuperLog==''">监理日志：
+                    <el-card shadow="never" class="add">
+                        <el-form :model="SLdata" label-width="auto">
+                            <el-form-item label="天气：" prop="weather">
+                                <el-input type="textarea" autosize v-model="SLdata.weather" />
+                            </el-form-item>
+                            <el-form-item label="最低及最高气温：" prop="temperature">
+                                <el-input type="textarea" autosize v-model="SLdata.temperature" />
+                            </el-form-item>
+                            <el-form-item label="班组：" prop="group">
+                                <el-input type="textarea" autosize v-model="SLdata.group" />
+                            </el-form-item>
+                            <el-form-item label="施工人数：" prop="number">
+                                <el-input type="textarea" autosize v-model="SLdata.number" />
+                            </el-form-item>
+                            <el-form-item label="施工部位：" prop="constructArea">
+                                <el-input type="textarea" autosize v-model="SLdata.constructArea" />
+                            </el-form-item>
+                            <el-form-item label="施工内容：" prop="content">
+                                <el-input type="textarea" autosize v-model="SLdata.content" />
+                            </el-form-item>
+                            <el-form-item label="质量检查情况：" prop="result">
+                                <el-input type="textarea" autosize v-model="SLdata.result" />
+                            </el-form-item>
+                            <el-form-item label="设备报验：" prop="equipmentInspection">
+                                <el-input type="textarea" autosize v-model="SLdata.equipmentInspection" />
+                            </el-form-item>
+                            <el-form-item label="工程报验：" prop="projectInspection">
+                                <el-input type="textarea" autosize v-model="SLdata.projectInspection" />
+                            </el-form-item>
+                            <el-form-item label="取样送检：" prop="sampling">
+                                <el-input type="textarea" autosize v-model="SLdata.sampling" />
+                            </el-form-item>
+                            <el-form-item label="旁站送检：" prop="sitSuper">
+                                <el-input type="textarea" autosize v-model="SLdata.sitSuper" />
+                            </el-form-item>
+                            <el-form-item label="监理通知：" prop="superNotice">
+                                <el-input type="textarea" autosize v-model="SLdata.superNotice" />
+                            </el-form-item>
+                        </el-form>
+                        <el-button type="primary" @click="addSLconfirm(infoForm.data.record_id)">确认</el-button>
+                    </el-card>
+                </div>
                 <div width="80%" v-if="typeid=='6' && infoForm.data.SuperLog!=''">监理日志：
                     <el-card shadow="never" class="qz"> 
-                        <el-descriptions :column="1">
-                            <el-descriptions-item label="天气:">{{infoForm.data.SuperLog[0].weather}}</el-descriptions-item>
-                            <el-descriptions-item label="最低及最高气温:">{{infoForm.data.SuperLog[0].temperature}}</el-descriptions-item>
-                            <el-descriptions-item label="班组:">{{infoForm.data.SuperLog[0].group}}</el-descriptions-item>
-                            <el-descriptions-item label="施工人数:">{{infoForm.data.SuperLog[0].number}}</el-descriptions-item>
-                            <el-descriptions-item label="施工部位:">{{infoForm.data.SuperLog[0].constructArea}}</el-descriptions-item>
-                            <el-descriptions-item label="施工内容:">{{infoForm.data.SuperLog[0].content}}</el-descriptions-item>
-                            <el-descriptions-item label="质量检查情况:">{{infoForm.data.SuperLog[0].result}}</el-descriptions-item>
-                            <el-descriptions-item label="设备报验:">{{infoForm.data.SuperLog[0].equipmentInspection}}</el-descriptions-item>
-                            <el-descriptions-item label="工程报验:">{{infoForm.data.SuperLog[0].projectInspection}}</el-descriptions-item>
-                            <el-descriptions-item label="取样送检:">{{infoForm.data.SuperLog[0].sampling}}</el-descriptions-item>
-                            <el-descriptions-item label="旁站监理:">{{infoForm.data.SuperLog[0].sitSuper}}</el-descriptions-item>
-                            <el-descriptions-item label="监理通知:">{{infoForm.data.SuperLog[0].superNotice}}</el-descriptions-item>
-                        </el-descriptions>
+                        <el-form label-width="auto">
+                            <el-form-item v-for="item in SLlist.data" :label="item.label">
+                                <el-input type="textarea" autosize disabled :placeholder="item.value" />
+                            </el-form-item>
+                        </el-form>
                     </el-card>    
                 </div>
 
-                <div v-if="typeid=='7' && infoForm.data.DealLog==''">洽商记录：<el-button type="danger" plain size="small" @click="addDealLog(infoForm.data.record_id)" >+添加</el-button></div>
+                <div v-if="typeid=='7' && infoForm.data.DealLog==''">洽商记录：
+                    <el-card shadow="never" class="add">
+                        <el-form :model="DLdata" label-width="auto">
+                            <el-form-item label="洽商主题：" prop="title">
+                                <el-input type="textarea" autosize v-model="DLdata.title" />
+                            </el-form-item>
+                            <el-form-item label="洽商地址：" prop="address">
+                                <el-input type="textarea" autosize v-model="DLdata.address" />
+                            </el-form-item>
+                            <el-form-item label="洽商主持人：" prop="host">
+                                <el-input type="textarea" autosize v-model="DLdata.host" />
+                            </el-form-item>
+                            <el-form-item label="洽商内容：" prop="content">
+                                <el-input type="textarea" autosize v-model="DLdata.content" />
+                            </el-form-item>
+                            <el-form-item label="洽商结果：" prop="result">
+                                <el-input type="textarea" autosize v-model="DLdata.result" />
+                            </el-form-item>
+                        </el-form>
+                        <el-button type="primary" @click="addDLconfirm(infoForm.data.record_id)">确认</el-button>
+                    </el-card>
+                </div>
                 <div width="80%" v-if="typeid=='7' && infoForm.data.DealLog!=''">洽商记录：
                     <el-card shadow="never" class="qz">
-                        <el-descriptions :column="1">
-                            <el-descriptions-item label="洽商主题:" label-style="font-weight=bold;">{{infoForm.data.DealLog[0].title}}</el-descriptions-item>
-                            <el-descriptions-item label="洽商地址:">{{infoForm.data.DealLog[0].address}}</el-descriptions-item>
-                            <el-descriptions-item label="洽商主持人:">{{infoForm.data.DealLog[0].host}}</el-descriptions-item>
-                            <el-descriptions-item label="洽商内容:">{{infoForm.data.DealLog[0].content}}</el-descriptions-item>
-                            <el-descriptions-item label="洽商结果:">{{infoForm.data.DealLog[0].result}}</el-descriptions-item>
-                        </el-descriptions>
+                        <el-form label-width="auto">
+                            <el-form-item v-for="item in DLlist.data" :label="item.label">
+                                <el-input type="textarea" autosize disabled :placeholder="item.value" />
+                            </el-form-item>
+                        </el-form>
                     </el-card>
                 </div>
 
-                <div v-if="typeid=='10' && infoForm.data.DrawingReview==''">图纸会审记录：<el-button type="danger" plain size="small" @click="addDrawingReview(infoForm.data.record_id)" >+添加</el-button></div>
+                <div v-if="typeid=='10' && infoForm.data.DrawingReview==''">图纸会审记录：
+                    <el-card shadow="never" class="add">
+                        <el-form :model="DRdata" label-width="auto">
+                            <el-form-item label="地点：" prop="place">
+                                <el-input type="textarea" autosize v-model="DRdata.place" />
+                            </el-form-item>
+                            <el-form-item label="专业名称：" prop="proName">
+                                <el-input type="textarea" autosize v-model="DRdata.proName" />
+                            </el-form-item>
+                            <el-form-item label="主持人：" prop="host">
+                                <el-input type="textarea" autosize v-model="DRdata.host" />
+                            </el-form-item>
+                            <el-form-item label="记录人：" prop="recorder">
+                                <el-input type="textarea" autosize v-model="DRdata.recorder" />
+                            </el-form-item>
+                            <el-form-item label="图纸问题：" prop="why">
+                                <el-input type="textarea" autosize v-model="DRdata.why" />
+                            </el-form-item>
+                            <el-form-item label="图号：" prop="picNumber">
+                                <el-input type="textarea" autosize v-model="DRdata.picNumber" />
+                            </el-form-item>
+                            <el-form-item label="会审记录：" prop="content">
+                                <el-input type="textarea" autosize v-model="DRdata.content" />
+                            </el-form-item>
+                        </el-form>
+                        <el-button type="primary" @click="addDRconfirm(infoForm.data.record_id)">确认</el-button>
+                    </el-card>
+                </div>
                 <div width="80%" v-if="typeid=='10' && infoForm.data.DrawingReview!=''">图纸会审记录：
                     <el-card shadow="never" class="qz">
-                        <el-descriptions :column="1">
-                            <el-descriptions-item label="地点:">{{infoForm.data.DrawingReview[0].place}}</el-descriptions-item>
-                            <el-descriptions-item label="专业名称:">{{infoForm.data.DrawingReview[0].proName}}</el-descriptions-item>
-                            <el-descriptions-item label="主持人:">{{infoForm.data.DrawingReview[0].host}}</el-descriptions-item>
-                            <el-descriptions-item label="记录人:">{{infoForm.data.DrawingReview[0].recorder}}</el-descriptions-item>
-                            <el-descriptions-item label="图纸问题:">{{infoForm.data.DrawingReview[0].why}}</el-descriptions-item>
-                            <el-descriptions-item label="图号:">{{infoForm.data.DrawingReview[0].picNumber}}</el-descriptions-item>
-                            <el-descriptions-item label="会审记录:">{{infoForm.data.DrawingReview[0].content}}</el-descriptions-item>
-                        </el-descriptions>
+                        <el-form label-width="auto">
+                            <el-form-item v-for="item in DRlist.data" :label="item.label">
+                                <el-input type="textarea" autosize disabled :placeholder="item.value" />
+                            </el-form-item>
+                        </el-form>
                     </el-card>
                 </div>
 
-                <div v-if="typeid=='8' && infoForm.data.DesignChange==''">设计变更：<el-button type="danger" plain size="small" @click="addDesignChange(infoForm.data.record_id)" >+添加</el-button></div>
+                <div v-if="typeid=='8' && infoForm.data.DesignChange==''">设计变更：
+                    <el-card shadow="never" class="add">
+                        <el-form :model="DCdata" label-width="auto">
+                            <el-form-item label="变更原因：" prop="why">
+                                <el-input type="textarea" autosize v-model="DCdata.why" />
+                            </el-form-item>
+                            <el-form-item label="图号：" prop="picNumber">
+                                <el-input type="textarea" autosize v-model="DCdata.picNumber" />
+                            </el-form-item>
+                            <el-form-item label="洽商内容：" prop="content">
+                                <el-input type="textarea" autosize v-model="DCdata.content" />
+                            </el-form-item>
+                        </el-form>
+                        <el-button type="primary" @click="addDCconfirm(infoForm.data.record_id)">确认</el-button>
+                    </el-card>
+                </div>
                 <div width="80%" v-if="typeid=='8' && infoForm.data.DesignChange!=''">设计变更：
                     <el-card shadow="never" class="qz">
-                        <el-descriptions :column="1">
-                            <el-descriptions-item label="变更原因:">{{infoForm.data.DesignChange[0].why}}</el-descriptions-item>
-                            <el-descriptions-item label="图号:">{{infoForm.data.DesignChange[0].picNumber}}</el-descriptions-item>
-                            <el-descriptions-item label="洽商内容:">{{infoForm.data.DesignChange[0].content}}</el-descriptions-item>
-                        </el-descriptions>
+                        <el-form label-width="auto">
+                            <el-form-item v-for="item in DClist.data" :label="item.label">
+                                <el-input type="textarea" autosize disabled :placeholder="item.value" />
+                            </el-form-item>
+                        </el-form>
                     </el-card>
                 </div>
 
             </div>
-            <el-descriptions :column="2">
-                <!--  -->
+            <el-descriptions :column="2" v-if="flag==true">
                 <el-descriptions-item v-if="infoForm.data.ownerOp==''">建设单位意见：<span style="color: #F56C6C;">待审核..</span></el-descriptions-item>
                 <el-descriptions-item v-else>建设单位意见：{{infoForm.data.ownerOp}}</el-descriptions-item>
                 <el-descriptions-item v-if="infoForm.data.designOp==''">设计单位意见：<span style="color: #F56C6C;">待审核..</span></el-descriptions-item>
@@ -711,8 +964,6 @@ const exam=()=>{
                 <el-descriptions-item v-else>监理单位意见：{{infoForm.data.superviseOp}}</el-descriptions-item>
                 <el-descriptions-item v-if="infoForm.data.constructOp==''">施工单位意见：<span style="color: #F56C6C;">待审核..</span></el-descriptions-item>
                 <el-descriptions-item v-else>施工单位意见：{{infoForm.data.constructOp}}</el-descriptions-item>
-
-               
             </el-descriptions>
         </el-card>
 
@@ -743,9 +994,6 @@ const exam=()=>{
             </span>
             </template>
         </el-dialog>
-
-
-
 
         <!-- 附件列表 -->
         <div class="file">
@@ -805,290 +1053,6 @@ const exam=()=>{
             </template>
         </el-dialog>
 
-        <!-- 添加签证计量单 -->
-        <el-dialog v-model="FormVisible1" title="添加签证计量单">
-            <el-form :model="EMdata">
-                <el-form-item label="内容：" prop="content">
-                    <el-input v-model="EMdata.content" />
-                </el-form-item>
-            </el-form>
-            <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="FormVisible1 = false">取消</el-button>
-                <el-button type="primary" @click="addEMconfirm()">确认</el-button>
-            </span>
-            </template>
-        </el-dialog>
-
-        <!-- 添加工作联系单 -->
-        <el-dialog v-model="FormVisible2" title="添加工作联系单">
-            <el-form :model="WCdata">
-                <el-form-item label="内容：" prop="content">
-                    <el-input v-model="WCdata.content" />
-                </el-form-item>
-            </el-form>
-            <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="FormVisible2 = false">取消</el-button>
-                <el-button type="primary" @click="addWCconfirm()">确认</el-button>
-            </span>
-            </template>
-        </el-dialog>
-
-        <!-- 添加监理工作联系单 -->
-        <el-dialog v-model="FormVisible3" title="添加监理工作联系单">
-            <el-form :model="SWCdata">
-                <el-form-item label="联系事项：" prop="content">
-                    <el-input v-model="SWCdata.content" />
-                </el-form-item>
-                <el-form-item label="事由：" prop="why">
-                    <el-input v-model="SWCdata.why" />
-                </el-form-item>
-            </el-form>
-            <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="FormVisible3 = false">取消</el-button>
-                <el-button type="primary" @click="addSWCconfirm()">确认</el-button>
-            </span>
-            </template>
-        </el-dialog>
-
-        <!-- 添加合同变更申请单 -->
-        <el-dialog v-model="FormVisible4" title="添加合同变更申请单">
-            <el-form :model="CCdata">
-                <el-form-item label="原因：" prop="why">
-                    <el-input v-model="CCdata.why" />
-                </el-form-item>
-            </el-form>
-            <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="FormVisible4 = false">取消</el-button>
-                <el-button type="primary" @click="addCCconfirm()">确认</el-button>
-            </span>
-            </template>
-        </el-dialog>
-
-        <!-- 添加监理会议纪要 -->
-        <el-dialog v-model="FormVisible5" title="添加监理会议纪要">
-            <el-form :model="SMdata">
-                <el-form-item label="会议地点：" prop="place">
-                    <el-input v-model="SMdata.place" />
-                </el-form-item>
-                <el-form-item label="主要议题：" prop="content">
-                    <el-input v-model="SMdata.content" />
-                </el-form-item>
-                <el-form-item label="解决或议定事项：" prop="agreedMatters">
-                    <el-input v-model="SMdata.agreedMatters" />
-                </el-form-item>
-                <el-form-item label="主持人：" prop="hostName">
-                    <el-input v-model="SMdata.hostName" />
-                </el-form-item>
-                <el-form-item label="建设单位人员：" prop="ownerName">
-                    <el-input v-model="SMdata.ownerName" />
-                </el-form-item>
-                <el-form-item label="设计单位人员：" prop="designName">
-                    <el-input v-model="SMdata.designName" />
-                </el-form-item>
-                <el-form-item label="监理单位人员：" prop="superName">
-                    <el-input v-model="SMdata.superName" />
-                </el-form-item>
-                <el-form-item label="施工单位人员：" prop="constructName">
-                    <el-input v-model="SMdata.constructName" />
-                </el-form-item>
-            </el-form>
-            <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="FormVisible5 = false">取消</el-button>
-                <el-button type="primary" @click="addSMconfirm()">确认</el-button>
-            </span>
-            </template>
-        </el-dialog>
-
-        <!-- 添加施工日志 -->
-        <el-dialog v-model="FormVisible6" title="添加施工日志">
-            <el-form :model="CLdata">
-                <el-form-item label="天气：" prop="weather">
-                    <el-input v-model="CLdata.weather" />
-                </el-form-item>
-                <el-form-item label="最低及最高气温：" prop="temperature">
-                    <el-input v-model="CLdata.temperature" />
-                </el-form-item>
-                <el-form-item label="班组：" prop="group">
-                    <el-input v-model="CLdata.group" />
-                </el-form-item>
-                <el-form-item label="班组负责人：" prop="groupManage">
-                    <el-input v-model="CLdata.groupManage" />
-                </el-form-item>
-                <el-form-item label="施工部位：" prop="constructArea">
-                    <el-input v-model="CLdata.constructArea" />
-                </el-form-item>
-                <el-form-item label="施工内容：" prop="content">
-                    <el-input v-model="CLdata.content" />
-                </el-form-item>
-                <el-form-item label="质量情况：" prop="result">
-                    <el-input v-model="CLdata.result" />
-                </el-form-item>
-                <el-form-item label="设计变更交底：" prop="changePaper">
-                    <el-input v-model="CLdata.changePaper" />
-                </el-form-item>
-                <el-form-item label="验收部位：" prop="inspectionArea">
-                    <el-input v-model="CLdata.inspectionArea" />
-                </el-form-item>
-                <el-form-item label="材料使用情况：" prop="materialSituation">
-                    <el-input v-model="CLdata.materialSituation" />
-                </el-form-item>
-                <el-form-item label="材料留置：" prop="materialTake">
-                    <el-input v-model="CLdata.materialTake" />
-                </el-form-item>
-                <el-form-item label="交接检查情况：" prop="handOverSituation">
-                    <el-input v-model="CLdata.handOverSituation" />
-                </el-form-item>
-                <el-form-item label="机械使用情况：" prop="machineSituation">
-                    <el-input v-model="CLdata.machineSituation" />
-                </el-form-item>
-                <el-form-item label="安全：" prop="safe">
-                    <el-input v-model="CLdata.safe" />
-                </el-form-item>
-                <el-form-item label="处理方法：" prop="processMethod">
-                    <el-input v-model="CLdata.processMethod" />
-                </el-form-item>
-            </el-form>
-            <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="FormVisible6 = false">取消</el-button>
-                <el-button type="primary" @click="addCLconfirm()">确认</el-button>
-            </span>
-            </template>
-        </el-dialog>
-
-        <!-- 添加监理日志 -->
-        <el-dialog v-model="FormVisible7" title="添加监理日志">
-            <el-form :model="SLdata">
-                <el-form-item label="天气：" prop="weather">
-                    <el-input v-model="SLdata.weather" />
-                </el-form-item>
-                <el-form-item label="最低及最高气温：" prop="temperature">
-                    <el-input v-model="SLdata.temperature" />
-                </el-form-item>
-                <el-form-item label="班组：" prop="group">
-                    <el-input v-model="SLdata.group" />
-                </el-form-item>
-                <el-form-item label="施工人数：" prop="number">
-                    <el-input v-model="SLdata.number" />
-                </el-form-item>
-                <el-form-item label="施工部位：" prop="constructArea">
-                    <el-input v-model="SLdata.constructArea" />
-                </el-form-item>
-                <el-form-item label="施工内容：" prop="content">
-                    <el-input v-model="SLdata.content" />
-                </el-form-item>
-                <el-form-item label="质量检查情况：" prop="result">
-                    <el-input v-model="SLdata.result" />
-                </el-form-item>
-                <el-form-item label="设备报验：" prop="equipmentInspection">
-                    <el-input v-model="SLdata.equipmentInspection" />
-                </el-form-item>
-                <el-form-item label="工程报验：" prop="projectInspection">
-                    <el-input v-model="SLdata.projectInspection" />
-                </el-form-item>
-                <el-form-item label="取样送检：" prop="sampling">
-                    <el-input v-model="SLdata.sampling" />
-                </el-form-item>
-                <el-form-item label="旁站送检：" prop="sitSuper">
-                    <el-input v-model="SLdata.sitSuper" />
-                </el-form-item>
-                <el-form-item label="监理通知：" prop="superNotice">
-                    <el-input v-model="SLdata.superNotice" />
-                </el-form-item>
-            </el-form>
-            <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="FormVisible7 = false">取消</el-button>
-                <el-button type="primary" @click="addSLconfirm()">确认</el-button>
-            </span>
-            </template>
-        </el-dialog>
-
-        <!-- 添加洽商记录 -->
-        <el-dialog v-model="FormVisible8" title="添加洽商记录">
-            <el-form :model="DLdata">
-                <el-form-item label="洽商主题：" prop="title">
-                    <el-input v-model="DLdata.title" />
-                </el-form-item>
-                <el-form-item label="洽商地址：" prop="address">
-                    <el-input v-model="DLdata.address" />
-                </el-form-item>
-                <el-form-item label="洽商主持人：" prop="host">
-                    <el-input v-model="DLdata.host" />
-                </el-form-item>
-                <el-form-item label="洽商内容：" prop="content">
-                    <el-input v-model="DLdata.content" />
-                </el-form-item>
-                <el-form-item label="洽商结果：" prop="result">
-                    <el-input v-model="DLdata.result" />
-                </el-form-item>
-            </el-form>
-            <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="FormVisible8 = false">取消</el-button>
-                <el-button type="primary" @click="addDLconfirm()">确认</el-button>
-            </span>
-            </template>
-        </el-dialog>
-
-        <!-- 添加图纸会审记录 -->
-        <el-dialog v-model="FormVisible9" title="添加图纸会审记录">
-            <el-form :model="DRdata">
-                <el-form-item label="地点：" prop="place">
-                    <el-input v-model="DRdata.place" />
-                </el-form-item>
-                <el-form-item label="专业名称：" prop="proName">
-                    <el-input v-model="DRdata.proName" />
-                </el-form-item>
-                <el-form-item label="主持人：" prop="host">
-                    <el-input v-model="DRdata.host" />
-                </el-form-item>
-                <el-form-item label="记录人：" prop="recorder">
-                    <el-input v-model="DRdata.recorder" />
-                </el-form-item>
-                <el-form-item label="图纸问题：" prop="why">
-                    <el-input v-model="DRdata.why" />
-                </el-form-item>
-                <el-form-item label="图号：" prop="picNumber">
-                    <el-input v-model="DRdata.picNumber" />
-                </el-form-item>
-                <el-form-item label="会审记录：" prop="content">
-                    <el-input v-model="DRdata.content" />
-                </el-form-item>
-            </el-form>
-            <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="FormVisible9 = false">取消</el-button>
-                <el-button type="primary" @click="addDRconfirm()">确认</el-button>
-            </span>
-            </template>
-        </el-dialog>
-
-        <!-- 添加设计变更 -->
-        <el-dialog v-model="FormVisible10" title="添加设计变更">
-            <el-form :model="DCdata">
-                <el-form-item label="变更原因：" prop="why">
-                    <el-input v-model="DCdata.why" />
-                </el-form-item>
-                <el-form-item label="图号：" prop="picNumber">
-                    <el-input v-model="DCdata.picNumber" />
-                </el-form-item>
-                <el-form-item label="洽商内容：" prop="content">
-                    <el-input v-model="DCdata.content" />
-                </el-form-item>
-            </el-form>
-            <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="FormVisible10 = false">取消</el-button>
-                <el-button type="primary" @click="addDCconfirm()">确认</el-button>
-            </span>
-            </template>
-        </el-dialog>
     </div>
 </template>
 
@@ -1122,6 +1086,10 @@ const exam=()=>{
     font-size: small;
 }
 
+.add{
+    text-align: center;
+}
+
 .step{
     width:60%;
     font-size: smaller;
@@ -1143,5 +1111,9 @@ const exam=()=>{
 }
 v-deep.kongbai {
     width: 200px;
+}
+:deep(.el-textarea__inner){
+    overflow: hidden; /* 禁用滚动条 */
+    resize: none; /* 禁止用户手动调整文本框的尺寸 */
 }
 </style>
