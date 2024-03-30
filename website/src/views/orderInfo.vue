@@ -603,7 +603,7 @@ const exam=()=>{
             <template #header>
                 <div class="card-header">
                     <span>工单详情</span>
-                    <div class="step">
+                    <div class="step" v-if="flag==true">
                         <el-steps v-if="oporder!='0'" :active="active" align-center finish-status="success">
                             <el-step v-for="item in step.data" :description="item.name" />
                         </el-steps>
